@@ -2,329 +2,520 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1400">
 <title>Kiki — Hero</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── Canvas ── */
-*{margin:0;padding:0;box-sizing:border-box;}
-html{width:1400px;height:900px;}
-body{
-  width:1400px;height:900px;overflow:hidden;
-  background:#532822;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
-  font-size:13px;
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1400px;
+    height: 900px;
+    background: #532822;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
 
-/* ── Outer wrapper — overflow:visible so Kiki overlaps ── */
-.hero{
-  position:relative;
-  width:940px;
-}
+  /* ── Floating App Window ── */
+  .app-window {
+    position: absolute;
+    top: 56px;
+    left: 60px;
+    width: 1240px;
+    height: 790px;
+    border-radius: 16px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+    overflow: hidden;
+    display: flex;
+    background: #FFF2E9;
+  }
 
-/* ── App window ── */
-.app{
-  width:940px;
-  border-radius:16px;
-  background:#FFF2E9;
-  box-shadow:0 40px 100px rgba(0,0,0,0.45),0 0 0 0.5px rgba(0,0,0,0.1);
-  overflow:hidden;
-}
+  /* ── GHL Sidebar ── */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #FFF2E9;
+    border-right: 0.5px solid #e8ddd8;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 0.5px solid #e8ddd8;
+  }
+  .kiki-wordmark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .kiki-wordmark-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #532822;
+    letter-spacing: -0.02em;
+  }
+  .location-switcher {
+    margin: 12px 14px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 0.5px solid #e8ddd8;
+  }
+  .loc-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #532822;
+  }
+  .loc-chevron { color: #8a6a65; font-size: 10px; }
+  .nav-section {
+    padding: 4px 10px;
+    flex: 1;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 10px;
+    margin-bottom: 1px;
+  }
+  .nav-item.active { background: #FFD05D; }
+  .nav-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #8a6a65;
+  }
+  .nav-item.active .nav-icon { color: #532822; }
+  .nav-label { font-size: 13px; font-weight: 600; color: #8a6a65; }
+  .nav-item.active .nav-label { color: #532822; }
+  .nav-divider { height: 0.5px; background: #e8ddd8; margin: 6px 10px; }
 
-/* ── macOS chrome ── */
-.chrome{
-  background:#f6f6f6;
-  border-bottom:0.5px solid #e8e0dc;
-  padding:13px 16px;
-  display:flex;align-items:center;gap:7px;
-}
-.dot{width:12px;height:12px;border-radius:50%;}
-.dot-r{background:#ff5f57;}
-.dot-y{background:#febc2e;}
-.dot-g{background:#28c840;}
+  /* ── Main content area ── */
+  .main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: #FFF2E9;
+    overflow: hidden;
+  }
+  .dash-hdr {
+    background: #fff;
+    border-bottom: 0.5px solid #f0e8e4;
+    padding: 14px 20px;
+    flex-shrink: 0;
+  }
+  .greeting h2 { font-size: 26px; font-weight: 700; color: #532822; line-height: 1.1; }
+  .greeting p { font-size: 13px; color: #8a6a65; margin-top: 2px; }
+  .dash-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
 
-/* ── Greeting header — exact match to .dash-hdr ── */
-.dash-hdr{
-  background:#fff;
-  border-bottom:0.5px solid #f0e8e4;
-  padding:16px 20px;
-}
-.greeting h2{font-size:32px;font-weight:700;color:#532822;}
-.greeting p{font-size:14px;color:#8a6a65;margin-top:2px;}
+  /* Stat cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .stat-card {
+    border-radius: 14px;
+    padding: 16px;
+    min-height: 86px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bg-shape {
+    position: absolute;
+    right: -16px;
+    bottom: -16px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    opacity: .18;
+  }
+  .stat-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+  .stat-num { font-size: 28px; font-weight: 700; line-height: 1; }
+  .stat-sub { font-size: 11px; margin-top: 4px; opacity: .75; }
 
-/* ── Content wrap ── */
-.wrap{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-  padding:20px;
-}
-.main{display:flex;flex-direction:column;gap:14px;}
+  /* Quick actions */
+  .sec { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a65; margin-bottom: 8px; }
+  .qa-row { display: flex; gap: 8px; }
+  .qa-btn {
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #532822;
+    box-shadow: 0 2px 8px rgba(83,40,34,.07);
+    font-family: inherit;
+  }
 
-/* ── Stat cards — exact match ── */
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.stat-card{
-  border-radius:14px;padding:16px;min-height:90px;
-  position:relative;overflow:hidden;
-}
-.bg-shape{
-  position:absolute;right:-16px;bottom:-16px;
-  width:72px;height:72px;border-radius:50%;opacity:.18;
-}
-.stat-title{
-  font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.07em;margin-bottom:8px;
-}
-.stat-num{font-size:28px;font-weight:700;line-height:1;}
+  /* Bottom grid */
+  .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; min-height: 0; }
+  .card { background: #fff; border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 8px rgba(83,40,34,.07); }
+  .card-right { display: flex; flex-direction: column; gap: 10px; }
+  .act-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid #f0e8e4; }
+  .act-row:last-child { border-bottom: none; }
+  .act-av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .act-name { font-size: 14px; font-weight: 700; color: #532822; }
+  .act-desc { font-size: 12px; color: #8a6a65; margin-top: 2px; }
+  .act-time { font-size: 11px; color: #b0a090; margin-top: 2px; }
+  .pay-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid #f0e8e4; }
+  .pay-row:last-child { border-bottom: none; }
+  .pay-tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .pay-right { text-align: right; }
+  .pay-amt { font-size: 13px; font-weight: 700; color: #532822; }
+  .pay-ct { font-size: 11px; color: #8a6a65; margin-top: 1px; }
+  .rc-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid #f0e8e4; }
+  .rc-row:last-child { border-bottom: none; }
+  .rc-av { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .rc-name { font-size: 13px; font-weight: 600; color: #532822; }
+  .rc-email { font-size: 11px; color: #8a6a65; margin-top: 1px; }
 
-/* ── Section label ── */
-.sec{
-  font-size:11px;font-weight:700;letter-spacing:.08em;
-  text-transform:uppercase;color:#8a6a65;
-}
+  /* ── Calendar slide-out panel ── */
+  .cal-panel {
+    position: absolute;
+    top: 56px;
+    right: 18px;
+    width: 268px;
+    height: 700px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 48px rgba(83,40,34,0.2), 0 2px 8px rgba(83,40,34,0.1);
+    z-index: 10;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .cal-card { background: #fff; border-radius: 14px; padding: 14px; border: 0.5px solid #f0e8e4; }
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .cal-month { font-size: 13px; font-weight: 700; color: #532822; }
+  .cal-nav { font-size: 14px; color: #8a6a65; background: none; border: none; padding: 2px 6px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; text-align: center; }
+  .cal-day-label { font-size: 9px; font-weight: 700; color: #8a6a65; padding: 3px 0; }
+  .cal-day {
+    font-size: 11px;
+    color: #532822;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1px auto;
+    position: relative;
+  }
+  .cal-day.today { background: #FFD05D; font-weight: 700; }
+  .cal-day.has-event::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: #E05228;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .cal-day.other-month { color: #c9b8b4; }
 
-/* ── Quick actions ── */
-.qa-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-.qa-btn{
-  background:#fff;border:none;border-radius:50px;
-  padding:9px 12px;font-size:14px;font-weight:600;color:#532822;
-  box-shadow:0 2px 8px rgba(83,40,34,.07);
-  font-family:inherit;text-align:center;
-}
+  .timeline-card { background: #fff; border-radius: 14px; padding: 14px; border: 0.5px solid #f0e8e4; flex: 1; }
+  .tl-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .tl-date { font-size: 13px; font-weight: 700; color: #532822; }
+  .tl-sub { font-size: 10px; color: #8a6a65; }
+  .tl-now { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+  .tl-now-line { flex: 1; height: 1px; background: #E05228; }
+  .tl-now-dot { width: 8px; height: 8px; border-radius: 50%; background: #E05228; flex-shrink: 0; }
+  .tl-now-time { font-size: 10px; font-weight: 700; color: #E05228; white-space: nowrap; }
+  .tl-item { display: flex; gap: 8px; margin-bottom: 10px; }
+  .tl-time { font-size: 10px; color: #8a6a65; width: 34px; flex-shrink: 0; padding-top: 3px; }
+  .tl-block { flex: 1; border-radius: 8px; padding: 8px 10px; }
+  .tl-name { font-size: 12px; font-weight: 700; }
+  .tl-detail { font-size: 11px; margin-top: 2px; opacity: .85; }
 
-/* ── Bottom grid ── */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.card{
-  background:#fff;border-radius:14px;
-  padding:14px 16px;
-  box-shadow:0 2px 8px rgba(83,40,34,.07);
-}
-
-/* ── Activity list ── */
-.act-item{
-  display:flex;align-items:flex-start;gap:8px;
-  padding:7px 0;border-bottom:.5px solid #f0e8e4;
-}
-.act-item:last-child{border-bottom:none;}
-.act-av{
-  width:30px;height:30px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;
-}
-.act-body{flex:1;min-width:0;}
-.act-name{font-size:15px;font-weight:700;color:#532822;}
-.act-desc{font-size:14px;color:#8a6a65;margin-top:1px;}
-.act-time{font-size:12px;color:#b0a090;margin-top:2px;}
-
-/* ── Payments ── */
-.pay-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:7px 0;border-bottom:.5px solid #f0e8e4;
-}
-.pay-row:last-child{border-bottom:none;}
-.pay-tag{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-.pay-amt{font-size:14px;font-weight:700;color:#532822;}
-.pay-ct{font-size:12px;color:#8a6a65;margin-top:1px;}
-
-/* ── Recent contacts ── */
-.rc-item{
-  display:flex;align-items:center;gap:8px;
-  padding:7px 0;border-bottom:.5px solid #f0e8e4;
-}
-.rc-item:last-child{border-bottom:none;}
-.rc-av{
-  width:28px;height:28px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;flex-shrink:0;
-}
-.rc-name{font-size:14px;font-weight:600;color:#532822;}
-.rc-email{font-size:12px;color:#8a6a65;margin-top:1px;}
-
-/* ── Kiki logo ── */
-.kiki{
-  position:absolute;
-  bottom:-46px;
-  right:-68px;
-  width:300px;
-  filter:drop-shadow(0 12px 32px rgba(0,0,0,.2));
-}
+  /* ── Kiki speech bubble character ── */
+  .kiki-bubble {
+    position: absolute;
+    bottom: -18px;
+    right: 48px;
+    height: 180px;
+    width: auto;
+    z-index: 20;
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
-<div class="hero">
 
-  <div class="app">
+<!-- ───────────────────────── App Window ───────────────────────── -->
+<div class="app-window">
 
-    <!-- macOS chrome -->
-    <div class="chrome">
-      <div class="dot dot-r"></div>
-      <div class="dot dot-y"></div>
-      <div class="dot dot-g"></div>
-    </div>
-
-    <!-- Greeting header — matches .dash-hdr exactly -->
-    <div class="dash-hdr">
-      <div class="greeting">
-        <h2>Good morning, Sarah.</h2>
-        <p>Here's what's on today.</p>
+  <!-- GHL Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="kiki-wordmark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="7" fill="#532822"/>
+          <path d="M8 8L8 20M8 14L15 8M8 14L15 20" stroke="#FFD05D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="14" r="2.5" fill="#FFD05D"/>
+        </svg>
+        <span class="kiki-wordmark-text">kiki</span>
       </div>
     </div>
 
-    <!-- Main content area -->
-    <div class="wrap">
-      <div class="main">
+    <div class="location-switcher">
+      <span class="loc-name">Bloom Studio</span>
+      <span class="loc-chevron">▾</span>
+    </div>
 
-        <!-- Stat cards -->
-        <div class="stat-grid">
-          <div class="stat-card" style="background:#E05228;color:#FFF2E9;">
-            <div class="bg-shape" style="background:#FFF2E9;"></div>
-            <div class="stat-title" style="color:#FFF2E9;">Open Tasks</div>
-            <div class="stat-num">5</div>
-          </div>
-          <div class="stat-card" style="background:#0084C5;color:#FFF2E9;">
-            <div class="bg-shape" style="background:#FFF2E9;"></div>
-            <div class="stat-title" style="color:#FFF2E9;">Unread Messages</div>
-            <div class="stat-num">3</div>
-          </div>
-          <div class="stat-card" style="background:#44A574;color:#FFF2E9;">
-            <div class="bg-shape" style="background:#FFF2E9;"></div>
-            <div class="stat-title" style="color:#FFF2E9;">Appointments (7d)</div>
-            <div class="stat-num">2</div>
-          </div>
-          <div class="stat-card" style="background:#FF9299;color:#FFF2E9;">
-            <div class="bg-shape" style="background:#FFF2E9;"></div>
-            <div class="stat-title" style="color:#FFF2E9;">New Contacts (7d)</div>
-            <div class="stat-num">7</div>
-          </div>
+    <div class="nav-section">
+      <div class="nav-item active">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span>
+        <span class="nav-label">Dashboard</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="nav-label">Messages</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <span class="nav-label">Projects</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></span>
+        <span class="nav-label">Kiki AI</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+        <span class="nav-label">Payments</span>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="nav-label">Contacts</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        <span class="nav-label">Calendars</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        <span class="nav-label">Opportunities</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+        <span class="nav-label">Marketing</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+        <span class="nav-label">Automation</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="nav-label">Media Storage</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+        <span class="nav-label">Reputation</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+        <span class="nav-label">Set Up</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M20 12h-2M6 12H4M17.66 17.66l-1.41-1.41M7.76 7.76L6.34 6.34M12 4V2M12 22v-2"/></svg></span>
+        <span class="nav-label">Settings</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-area">
+    <div class="dash-hdr">
+      <div class="greeting">
+        <h2>Good morning, Sarah.</h2>
+        <p>Friday 13 June 2026 · Here's what's happening today.</p>
+      </div>
+    </div>
+
+    <div class="dash-body">
+      <!-- 4 Stat Cards in a row -->
+      <div class="stat-grid">
+        <div class="stat-card" style="background:#E05228;color:#FFF2E9;">
+          <div class="bg-shape" style="background:#FFF2E9;"></div>
+          <div class="stat-title" style="color:#FFF2E9;">Open Tasks</div>
+          <div class="stat-num">4</div>
+          <div class="stat-sub">2 due today · 1 overdue</div>
         </div>
+        <div class="stat-card" style="background:#0084C5;color:#FFF2E9;">
+          <div class="bg-shape" style="background:#FFF2E9;"></div>
+          <div class="stat-title" style="color:#FFF2E9;">Unread Messages</div>
+          <div class="stat-num">6</div>
+          <div class="stat-sub">James, Rachel + 4 more</div>
+        </div>
+        <div class="stat-card" style="background:#44A574;color:#FFF2E9;">
+          <div class="bg-shape" style="background:#FFF2E9;"></div>
+          <div class="stat-title" style="color:#FFF2E9;">Appointments (7d)</div>
+          <div class="stat-num">3</div>
+          <div class="stat-sub">Next: Brand strategy call</div>
+        </div>
+        <div class="stat-card" style="background:#FF9299;color:#FFF2E9;">
+          <div class="bg-shape" style="background:#FFF2E9;"></div>
+          <div class="stat-title" style="color:#FFF2E9;">New Contacts (7d)</div>
+          <div class="stat-num">2</div>
+          <div class="stat-sub">This week</div>
+        </div>
+      </div>
 
-        <!-- Quick actions -->
+      <!-- Quick Actions -->
+      <div>
         <div class="sec">Quick Actions</div>
-        <div class="qa-grid">
+        <div class="qa-row">
           <button class="qa-btn">＋ New contact</button>
           <button class="qa-btn">＋ New task</button>
           <button class="qa-btn">＋ New conversation</button>
           <button class="qa-btn">＋ New invoice</button>
         </div>
+      </div>
 
-        <!-- Bottom grid -->
-        <div class="bottom-grid">
+      <!-- Bottom grid: Activity | Payments + Contacts -->
+      <div class="bottom-grid">
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="sec">Recent Activity</div>
+          <div class="act-row">
+            <div class="act-av" style="background:#FFD05D;color:#532822;">JH</div>
+            <div style="min-width:0;">
+              <div style="display:flex;align-items:baseline;gap:5px;">
+                <span class="act-name">James Hartley</span>
+                <span style="font-size:12px;color:#8a6a65;">· Bloom Studio</span>
+              </div>
+              <div class="act-desc">"Hey Sarah, just reviewed the latest brand deck and love the direction…"</div>
+              <div class="act-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="act-row">
+            <div class="act-av" style="background:#FF9299;color:#7a1a22;">RV</div>
+            <div>
+              <div class="act-name">Rachel Vance</div>
+              <div class="act-desc">New message received</div>
+              <div class="act-time">4 hours ago</div>
+            </div>
+          </div>
+          <div class="act-row">
+            <div class="act-av" style="background:#44A574;color:#fff;">TO</div>
+            <div>
+              <div class="act-name">Tom Okello</div>
+              <div class="act-desc">Invoice viewed</div>
+              <div class="act-time">Yesterday</div>
+            </div>
+          </div>
+        </div>
 
-          <!-- Recent Activity -->
+        <!-- Right col -->
+        <div class="card-right">
           <div class="card">
-            <div class="sec" style="margin-bottom:10px;">Recent Activity</div>
-            <div class="act-item">
-              <div class="act-av" style="background:#88BFFF;color:#0a3a6e;">JH</div>
-              <div class="act-body">
-                <div class="act-name">James Hartley</div>
-                <div class="act-desc">New message · Slack</div>
-                <div class="act-time">8m ago</div>
-              </div>
+            <div class="sec">Payments</div>
+            <div class="pay-row">
+              <span class="pay-tag" style="color:#8a6a65;">Draft</span>
+              <div class="pay-right"><div class="pay-amt">$2,400</div><div class="pay-ct">2 invoices</div></div>
             </div>
-            <div class="act-item">
-              <div class="act-av" style="background:#A9EA76;color:#2a5e0a;">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-              </div>
-              <div class="act-body">
-                <div class="act-name">Strategy Call</div>
-                <div class="act-desc">Rachel Vance · Today 2pm</div>
-                <div class="act-time">Upcoming</div>
-              </div>
+            <div class="pay-row">
+              <span class="pay-tag" style="color:#E05228;">Due</span>
+              <div class="pay-right"><div class="pay-amt">$1,800</div><div class="pay-ct">1 invoice</div></div>
             </div>
-            <div class="act-item">
-              <div class="act-av" style="background:#FFD05D;color:#532822;">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-              </div>
-              <div class="act-body">
-                <div class="act-name">Finalise brand guidelines</div>
-                <div class="act-desc">Task · Bloom Studio</div>
-                <div class="act-time">Due today</div>
-              </div>
+            <div class="pay-row">
+              <span class="pay-tag" style="color:#44A574;">Received</span>
+              <div class="pay-right"><div class="pay-amt">$6,500</div><div class="pay-ct">3 invoices</div></div>
             </div>
           </div>
 
-          <!-- Right column -->
-          <div style="display:flex;flex-direction:column;gap:10px;">
-
-            <!-- Payments -->
-            <div class="card">
-              <div class="sec" style="margin-bottom:10px;">Payments</div>
-              <div class="pay-row">
-                <span class="pay-tag" style="color:#8a6a65;">Draft</span>
-                <div style="text-align:right;">
-                  <div class="pay-amt">$820.00</div>
-                  <div class="pay-ct">1 invoice</div>
-                </div>
-              </div>
-              <div class="pay-row">
-                <span class="pay-tag" style="color:#E05228;">Due</span>
-                <div style="text-align:right;">
-                  <div class="pay-amt">$4,200.00</div>
-                  <div class="pay-ct">1 invoice</div>
-                </div>
-              </div>
-              <div class="pay-row">
-                <span class="pay-tag" style="color:#44A574;">Received</span>
-                <div style="text-align:right;">
-                  <div class="pay-amt">$2,400.00</div>
-                  <div class="pay-ct">2 invoices</div>
-                </div>
-              </div>
-              <div class="pay-row">
-                <span class="pay-tag" style="color:#c0392b;">Overdue</span>
-                <div style="text-align:right;">
-                  <div class="pay-amt">$0.00</div>
-                  <div class="pay-ct"></div>
-                </div>
-              </div>
+          <div class="card">
+            <div class="sec">Recent Contacts</div>
+            <div class="rc-row">
+              <div class="rc-av" style="background:#FFD05D;color:#532822;">JH</div>
+              <div><div class="rc-name">James Hartley</div><div class="rc-email">james@bloomstudio.com</div></div>
             </div>
-
-            <!-- Recent Contacts -->
-            <div class="card">
-              <div class="sec" style="margin-bottom:10px;">Recent Contacts</div>
-              <div class="rc-item">
-                <div class="rc-av" style="background:#FFD05D;color:#532822;">JH</div>
-                <div>
-                  <div class="rc-name">James Hartley</div>
-                  <div class="rc-email">james@bloomstudio.co</div>
-                </div>
-              </div>
-              <div class="rc-item">
-                <div class="rc-av" style="background:#88BFFF;color:#0a3a6e;">RV</div>
-                <div>
-                  <div class="rc-name">Rachel Vance</div>
-                  <div class="rc-email">rachel@vancecreative.com</div>
-                </div>
-              </div>
-              <div class="rc-item">
-                <div class="rc-av" style="background:#FF9299;color:#7a1a22;">TO</div>
-                <div>
-                  <div class="rc-name">Tom Okello</div>
-                  <div class="rc-email">tom.okello@gmail.com</div>
-                </div>
-              </div>
+            <div class="rc-row">
+              <div class="rc-av" style="background:#FF9299;color:#7a1a22;">RV</div>
+              <div><div class="rc-name">Rachel Vance</div><div class="rc-email">rachel@vancedesign.co</div></div>
             </div>
-
+            <div class="rc-row">
+              <div class="rc-av" style="background:#44A574;color:#fff;">TO</div>
+              <div><div class="rc-name">Tom Okello</div><div class="rc-email">tom@okellobrands.com</div></div>
+            </div>
           </div>
-        </div><!-- /bottom-grid -->
-
-      </div><!-- /main -->
-    </div><!-- /wrap -->
-
-  </div><!-- /app -->
-
-  <!-- Kiki logo — cream, overlapping bottom-right corner -->
-  <svg class="kiki" viewBox="0 0 388.55 140.95" xmlns="http://www.w3.org/2000/svg">
-    <path d="M57.46,111.2s.05-.02.08-.02c-.03,0-.05.01-.08.02h0Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M57.46,111.2h0s-.02,0-.02,0c0,0,.01,0,.02,0Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M60.31,113.43s.01.02.02.04c0-.01,0-.02-.02-.04Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M60.33,113.49s0,.01,0,.02c0,0,0-.01,0-.02Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M93.92,140.94c-11.12-.25-21.86-5.58-28.77-14.25-2.98-3.67-4.68-8.54-5.48-13.15-.27-1.56-.82-2.84-2.29-3.59-1.04-.53-2.16-.25-3.13.3-2.11,1.2-3.58,3.34-5.04,5.22-3.42,4.42-6.58,9.16-10.74,12.94-8.42,7.67-16.24,11.59-23.19,11.59-2.06,0-4.07-.35-5.98-1.04-3.89-1.54-6.51-4.03-7.97-7.58-4.51-10.98,3.42-29,8.16-39.77l.83-1.88c2.62-5.56,5.43-11.15,8.14-16.56,3.7-7.38,7.53-15.02,10.98-22.75,1.87-3.6,3.68-7.44,5.43-11.15,5.61-11.88,11.42-24.17,21.07-33.16,4.74-3.97,11.56-6.1,19.67-6.1,2.27,0,4.64.17,7.03.49,4.57.56,7.41,1.88,8.69,4.04,2.21,3.72-.27,9.99-2.67,16.06-.04.08-.25.59-.25.59-.16.39-.31.76-.45,1.14-.28.72-.56,1.45-.84,2.18l-.85,2.3-.55,1.32c-.68,1.62-1.35,3.23-2,4.85-.68,1.66-1.35,3.33-2.02,5-.32.77-.6,1.56-.89,2.36l-.22.65-.07.16c-2.25,5.03-4.64,10.63-5.58,16.13-.08.4-.14.82-.2,1.24-.08.61-.03,1.21.14,1.75.21,1.9,1.35,3.03,3.07,3.03,1.41,0,4.08-.66,10.88-6.39,7.73-7.26,15.7-15.16,24.41-24.18,8.72-9.92,19.05-21.01,31.92-27.67,3.09-1.47,6.06-2.22,8.8-2.22,3.79,0,6.98,1.45,9.23,4.2,3.06,3.75,4.08,9.58,2.78,16.01-1.23,4.8-4.18,9.15-7.03,13.34-.94,1.38-1.87,2.76-2.75,4.15-5.9,8.69-13.91,15.9-21.66,22.88-3.1,2.79-6.31,5.68-9.34,8.64-.76.75-1.53,1.49-2.31,2.23-3.62,3.46-10.97,9.25-10.48,14.84.09,1.09.62,2.2,1.59,2.71.79.42,1.74.38,2.63.31,3.93-.27,7.86-.72,11.75-1.33,3.58-.57,6.92-1.94,10.65-1.37,3.48.53,6.28,3.33,7.11,6.7,1.79,7.25-3.57,17.6-7.95,22.63-9.2,10.91-28.14,22.19-43.91,22.19h-.05c-.09,0-.18,0-.27,0Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M178.16,48.72c1.56,1.87,3.59,3.28,5.89,4.1,2.28.81,4.74,1.22,7.34,1.22,2.41,0,4.91-.35,7.43-1.05,5.37-1.49,10.19-4.47,13.58-8.39,3.32-3.85,4.73-8.5,3.78-12.44-.7-2.89-2.69-5.47-5.45-7.09-1.45-.85-3.14-1.5-5.03-1.92h-.14s-.24-.09-.24-.09l-.14-.03h-.12s-.67-.12-.82-.14c-.64-.09-1.32-.15-2.07-.19-.42-.02-.84-.03-1.27-.03-1.35,0-2.67.11-3.92.32-5.65.91-10.75,3.26-14.74,6.77-2.14,1.88-7.03,6.96-6.36,13.42.21,2.07,1.02,4.05,2.28,5.55Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M342.65,48.72c1.56,1.87,3.59,3.28,5.89,4.1,2.27.81,4.74,1.22,7.34,1.22,2.41,0,4.91-.35,7.43-1.05,5.37-1.49,10.19-4.47,13.58-8.39,3.32-3.85,4.74-8.5,3.78-12.44-.7-2.89-2.69-5.47-5.45-7.09-1.45-.85-3.14-1.5-5.03-1.92h-.14s-.24-.09-.24-.09l-.14-.03h-.12s-.68-.12-.82-.14c-.64-.09-1.32-.15-2.07-.19-.42-.02-.84-.03-1.27-.03-1.35,0-2.67.11-3.92.32-5.65.91-10.75,3.26-14.74,6.77-2.14,1.88-7.03,6.96-6.36,13.42.21,2.07,1.02,4.05,2.28,5.55Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-    <path d="M386.46,88.52c-1.42-1.7-3.82-2.79-6.12-2.79-1.17,0-2.85.28-4.26,1.69-3.04,2.63-5.9,4.34-8.72,5.23-1.01.32-2.23.59-3.28.75-.94.14-2.04-.06-2.56-.86-.4-.6-.37-1.39-.29-2.11.07-.59.15-1.18.26-1.76.77-4.06,2.82-7.72,3.74-11.76.51-2.24.83-4.71-.05-6.91s-2.78-3.67-4.73-4.83c-3.23-1.92-6.82-3.24-10.32-4.56-1.97-.74-3.84-1.11-5.57-1.11-5.29,0-9.7,3.57-13.48,10.93-2.87,5.23-5.22,10.73-7.11,16.39-.5,1.48-.96,2.98-1.4,4.48-.52,1.81-.82,2.9-2.33,4.12-1.28,1.04-2.78,1.77-4.26,2.46-4.54,2.09-11.05,5.84-16.14,3.59-.64-.28-1.22-.8-1.4-1.48-.29-1.06.44-2.14,1.27-2.86,1.22-1.07,2.74-2.01,3.84-3.18,0,0,.16-.17.16-.17.58-.57,1.19-1.12,1.8-1.64.18-.17.37-.32.56-.49l.24-.21.93-.97c2.89-3.01,5.88-6.13,7.64-9.83,2.1-4.57,1.8-9.55-.87-14.03-3.29-5.54-9.59-9.39-16.07-9.82-.43-.04-.85-.05-1.28-.05-4.79,0-9.29,2.17-14.3,4.82-1.15.55-2.3,1.23-3.52,1.94-3.21,1.88-6.53,3.83-10.36,3.83-1.46,0-2.78-.33-3.36-1.8-.45-1.15-.34-2.37-.18-3.55.02-.17.05-.34.06-.5v-.11s.17-.79.17-.79l.05-.2.02-.11.02-.09c.1-.44.25-.89.48-1.46v-.04c.14-.41.3-.82.47-1.22l.18-.45c.18-.37.37-.74.55-1.11l.34-.66.15-.24s.27-.53.32-.63l.11-.26c.23-.57.48-1.15.72-1.61.18-.4.37-.77.54-1.06.13-.28.28-.55.43-.81.06-.15.12-.3.21-.48.18-.43.39-.84.6-1.25l.25-.48c.31-.58.6-1.13.88-1.62l.06-.12c.2-.39.39-.78.58-1.17l.24-.5c.28-.57.59-1.13.89-1.67.18-.33.34-.65.51-.98l.34-.66c.28-.56.59-1.11.88-1.6.26-.48.49-1,.71-1.51l.12-.27c.39-.91.79-1.81,1.2-2.72.4-.9.8-1.8,1.19-2.69.84-1.98,1.77-3.95,2.53-5.96,3.66-9.73-7.93-13.3-15-14.62-1.6-.3-3.15-.45-4.63-.45-12.03,0-18.19,9.59-24.97,22.05-1.34,2.85-2.7,5.7-4.05,8.55-1.92,4.04-3.85,8.08-5.73,12.14-2.93,6.3-5.78,12.63-8.42,19.06-1.32,3.2-2.59,6.42-3.78,9.67-.95,2.57-2.58,4.23-4.77,5.85-1.99,1.47-4.16,2.72-6.52,3.47-1.56.5-3.64,1.13-5.09-.1-.63-.53-.96-1.36-1.05-2.18s.06-1.65.25-2.45c.76-3.21,2.4-6.07,3.3-9.25.55-1.94,1.03-3.97.94-6-.3-7.33-10.04-9.97-15.59-12.06-1.97-.74-3.84-1.11-5.57-1.11-5.29,0-9.7,3.57-13.48,10.93-7.42,13.52-11.88,29.69-13.63,49.46-.51,5.13-.26,12.19,3.84,16.72,2.6,2.88,6.46,4.33,11.46,4.33h.32c12.22-.34,25.53-7.51,36.05-16.57.11,3.78.81,7.38,2.59,10.15,1.91,2.99,4.84,4.8,8.86,5.54.63.08,1.26.11,1.89.11,6.56,0,11.98-4.24,17.23-8.34,2.31-1.81,4.7-3.67,7.13-5.14.2-.13.41-.23.62-.33l.27-.13.16-.03c.86-.17,1.73-.26,2.58-.26.69,0,1.39.06,2.07.17l.11.02.11.04c4.06,1.4,7.55,3.78,10.93,6.08,1.63,1.11,3.31,2.26,4.94,3.22.13.05.26.12.49.27.1.08.22.13.41.23l.62.29c2.86,1.34,5.57,2.61,8.61,3.3h.19l.18.05c.11.03.23.06.35.08l.32.07c.22.06.44.12.66.16,1.11.19,2.2.38,3.34.63l.47.11h.06s.09.03.09.03c.18.02.99.09,1.21.12.06,0,.14,0,.27.01.23.02.43.04.53.05h.12s.33,0,.33,0c.08,0,.16,0,.28.01.23,0,.46,0,.69-.05l.11-.02h.11c9.08-.07,17.96-5.36,25.44-10.53.83-.57,1.66-1.14,2.5-1.71,1.93-1.32,3.89-2.67,5.81-4.06.11,4.22,1.07,8.79,4.02,12.05,2.6,2.88,6.46,4.33,11.46,4.33h.32c18.28-.51,38.98-16.27,49.17-30.83,4.2-6.2,9.21-15.18,4.21-21.6ZM270.63,94.17c-1.96,2.2-5.73,4.9-9.42,5.68-.42.17-.85.24-1.15.26-.62.2-1.25.2-1.73.2h-.15c-.64-.08-2.77-.44-4.01-2-.17-.13-.29-.25-.32-.3-.53-.53-.77-1.28-.86-1.68-.76-2.1.89-6.47,2.03-8.28l.08-.15.05-.05.27-.42h.04s.01-.02.02-.02c.45-.82,1.01-1.53,1.62-2.05.78-.82,2.46-1.68,3.65-2.01,1.13-.46,2.25-.7,3.23-.7.1,0,.2,0,.3,0,.4-.06.8-.09,1.19-.09.63,0,1.24.08,1.82.24.5.04,1,.16,1.51.39,2.24.63,3.88,2.12,4.4,4.01.43,1.54.33,4.01-2.54,6.97Z" style="fill:#FFF2E9;stroke-width:0px;"/>
-  </svg>
-
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ───────────────────────── Calendar Panel ───────────────────────── -->
+<div class="cal-panel">
+  <div class="cal-card">
+    <div class="cal-header">
+      <button class="cal-nav">‹</button>
+      <span class="cal-month">June 2026</span>
+      <button class="cal-nav">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-day-label">M</div><div class="cal-day-label">T</div><div class="cal-day-label">W</div><div class="cal-day-label">T</div><div class="cal-day-label">F</div><div class="cal-day-label">S</div><div class="cal-day-label">S</div>
+      <!-- June 2026: starts on Monday -->
+      <div class="cal-day other-month"></div><div class="cal-day other-month"></div><div class="cal-day other-month"></div><div class="cal-day other-month"></div><div class="cal-day other-month"></div><div class="cal-day other-month"></div><div class="cal-day">1</div>
+      <div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div>
+      <div class="cal-day">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day">12</div><div class="cal-day today">13</div><div class="cal-day">14</div><div class="cal-day">15</div>
+      <div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day has-event">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div>
+      <div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div>
+      <div class="cal-day">30</div>
+    </div>
+  </div>
+
+  <div class="timeline-card">
+    <div class="tl-header">
+      <span class="tl-date">Today's Timeline</span>
+      <span class="tl-sub">Fri 13 Jun</span>
+    </div>
+    <div class="tl-now">
+      <div class="tl-now-dot"></div>
+      <div class="tl-now-time">Now · 9:41 am</div>
+      <div class="tl-now-line"></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Thu 18</div>
+      <div class="tl-block" style="background:#FFF0C2;">
+        <div class="tl-name" style="color:#532822;">Brand Strategy Call</div>
+        <div class="tl-detail" style="color:#7a4a10;">Bloom Studio</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────── Kiki Speech Bubble ───────────────────────── -->
+<svg class="kiki-bubble" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234.32 183.16">
+  <path d="M233.84,90.39c-2.99,22.39-19.72,43.72-44.77,57.01-18.89,10.04-40.83,15.8-63.53,16.82-.49,1.51-1.34,3.01-2.56,4.52l-.15.19c-8.97,10.43-28.01,15.07-41.36,14.11-5.61-.49-13.24-1.83-14.63-7.78-.3-1.64.19-3.56,1.28-4.9.55-.7,1.51-1.54,3.01-1.7,2.98-.55,5.33-1.39,7.19-2.62l.17-.11.08-.13c.09-.06.19-.13.26-.19,1.3-.98,2.91-2.77,1.52-4.42-.61-.72-1.54-1.08-2.43-1.39-5.7-1.98-11.46-3.54-17.1-5.73-13.5-5.25-25.5-12.37-35.67-21.19-10.32-8.87-18.04-20.34-22.38-33.19-3.47-10.4-3.69-22.28-.6-33.47C11.73,31.29,47.43,14.81,62.33,9.32,90.16-.88,121.39-2.75,152.62,3.92c6.95,1.43,13.99,3.54,21.02,6.27,2.2.85,4.39,1.77,6.54,2.71,3.82,1.73,7.23,3.41,10.38,5.18.7.4,3.96,2.39,3.96,2.39l.62.24.64.43,1.05,1,.73.24c8.95,5.99,16.42,12.75,22.24,20.12,11.09,13.99,16.2,31.45,14.03,47.88Z" style="fill:#ffd05d;"/>
+  <path d="M153.66,77.52c-.68,1.6-1.57,3.01-2.66,4.2-1.1,1.2-2.5,2.09-4.06,2.56-1.26.38-2.68.36-4.01-.04-4.15-1.27-6-5.6-6.61-7.41-1.13-3.37-1.24-7.12-.33-10.84.2-.83.47-1.67.83-2.5.11-.26.23-.52.35-.77.22-.45.43-.85.66-1.23.05-.08.3-.47.3-.47l.03-.07.05-.08.12-.12.03-.09c.75-1.05,1.59-1.92,2.49-2.6,1.72-1.28,3.83-1.83,5.79-1.51,2.67.44,5.17,2.52,6.68,5.57,1.54,3.1,2.12,6.85,1.63,10.55-.22,1.73-.66,3.36-1.28,4.85Z" style="fill:#532822;"/>
+  <path d="M199.52,77.52c-.68,1.6-1.57,3.01-2.66,4.2-1.1,1.2-2.5,2.09-4.06,2.56-1.26.38-2.68.36-4.01-.04-4.15-1.27-6-5.6-6.61-7.41-1.13-3.37-1.24-7.12-.33-10.84.2-.83.47-1.67.83-2.5.11-.26.23-.52.35-.77.22-.45.43-.85.66-1.23.05-.08.3-.47.3-.47l.03-.07.05-.08.12-.12.03-.09c.75-1.05,1.59-1.92,2.49-2.6,1.72-1.28,3.83-1.83,5.79-1.51,2.67.44,5.17,2.52,6.68,5.57,1.54,3.1,2.12,6.85,1.63,10.55-.22,1.73-.66,3.36-1.28,4.85Z" style="fill:#532822;"/>
+  <path d="M183.99,100.34c-.28.45-.57.81-.85,1.13-.85,1.01-1.9,2.02-3.12,2.91-.49.36-.97.77-1.5,1.09-1.86,1.3-3.97,2.35-6.07,3.08-1.5.57-3.08.93-4.66.93h-.65c-1.62,0-3.2-.36-4.7-.93,0,0-.04,0-.04-.04-1.86-.61-3.64-1.54-5.3-2.55-.41-.28-.81-.53-1.17-.81-1.66-1.13-3.08-2.43-4.13-3.68-.28-.32-.57-.69-.85-1.13-1.34-1.98-2.55-4.9-2.02-7.04.24-1.09.97-1.86,2.1-2.35.28,0,.61-.04.93-.04,1.05,0,2.15.2,3.2.36.93.12,1.94.28,3,.32h.24c1.38.12,4.7.36,9.15.36,2.79,0,6.03-.08,9.51-.36.36,0,.69-.04,1.01-.08.16-.04.36-.04.53-.08.4-.04.81-.12,1.17-.16,1.05-.16,2.14-.36,3.2-.36.32,0,.65.04.93.04,1.13.49,1.82,1.25,2.1,2.35.53,2.14-.69,5.06-2.02,7.04Z" style="fill:#532822;"/>
+  <path d="M178.52,105.48c-1.86,1.3-3.97,2.35-6.07,3.08-1.5.57-3.08.93-4.66.93h-.65c-1.62,0-3.2-.36-4.7-.93,0,0-.04,0-.04-.04-1.86-.61-3.64-1.54-5.3-2.55.69-.93,1.58-1.66,2.55-2.27,4.45-2.67,14.13-2.27,18.86,1.78Z" style="fill:#fff2e9;"/>
+</svg>
+
 </body>
 </html>
