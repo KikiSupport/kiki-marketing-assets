@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1400">
+<title>Kiki — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1400px;height:900px;background:#532822;font-family:'Plus Jakarta Sans',sans-serif;overflow:hidden;position:relative;cursor:none}
+
+/* ── Scenes ── */
+.scene{position:absolute;inset:0;opacity:0;transition:opacity .4s ease;pointer-events:none}
+.scene.on{opacity:1}
+
+/* ── Cursor ── */
+#cur{position:absolute;left:700px;top:450px;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);transition:left .85s cubic-bezier(.4,0,.2,1),top .85s cubic-bezier(.4,0,.2,1),opacity .3s}
+.c-dot{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.93);box-shadow:0 2px 10px rgba(0,0,0,.28);transition:transform .15s}
+.c-tail{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:9px solid rgba(255,255,255,.55)}
+#cur.clicking .c-dot{transform:scale(.72)}
+
+/* ══════════════════════════════
+   SCENE 1: BRIEFING
+══════════════════════════════ */
+#s1{background:#FFF2E9;display:flex;align-items:center;justify-content:center}
+.s1in{display:flex;flex-direction:column;align-items:center;gap:36px}
+.s1greet{text-align:center}
+.s1greet h1{font-size:54px;font-weight:700;color:#532822;line-height:1}
+.s1greet p{font-size:18px;color:#8a6a65;margin-top:10px}
+.s1cards{display:flex;gap:16px}
+.bc{width:210px;border-radius:16px;padding:20px;position:relative;overflow:hidden;opacity:0;transform:translateY(22px);transition:opacity .5s ease,transform .5s ease}
+.bc.v{opacity:1;transform:translateY(0)}
+.bc-sh{position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;opacity:.18}
+.bc-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.bc-n{font-size:40px;font-weight:700;line-height:1}
+.bc-s{font-size:12px;margin-top:5px;opacity:.75}
+#s1btn{background:#532822;color:#FFF2E9;border:none;border-radius:50px;padding:14px 40px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;opacity:0;transition:opacity .5s ease;animation:pbtn 2s ease-in-out infinite}
+#s1btn.v{opacity:1}
+@keyframes pbtn{0%,100%{box-shadow:0 0 0 0 rgba(83,40,34,.4)}50%{box-shadow:0 0 0 14px rgba(83,40,34,0)}}
+
+/* ══════════════════════════════
+   SHARED: App Window + Sidebar
+══════════════════════════════ */
+.aw{position:absolute;top:56px;left:60px;width:1240px;height:790px;border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,.4);overflow:hidden;display:flex}
+.sb{width:220px;min-width:220px;background:#FFF2E9;border-right:.5px solid #e8ddd8;display:flex;flex-direction:column;flex-shrink:0}
+.sbl{padding:20px 20px 16px;border-bottom:.5px solid #e8ddd8;display:flex;align-items:center;gap:8px}
+.sblt{font-size:20px;font-weight:700;color:#532822}
+.sbloc{margin:12px 14px;background:#fff;border-radius:10px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;border:.5px solid #e8ddd8;font-size:12px;font-weight:600;color:#532822}
+.sbn{padding:4px 10px;flex:1;overflow:hidden}
+.sbi{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;margin-bottom:1px;font-size:13px;font-weight:600;color:#8a6a65}
+.sbi.on{background:#FFD05D;color:#532822}
+.sbi svg{flex-shrink:0;color:inherit}
+.sbdiv{height:.5px;background:#e8ddd8;margin:6px 10px}
+
+/* ══════════════════════════════
+   SCENE 2: DASHBOARD
+══════════════════════════════ */
+#s2{background:#532822}
+.mc{flex:1;display:flex;flex-direction:column;min-width:0;background:#FFF2E9;overflow:hidden}
+.mch{background:#fff;border-bottom:.5px solid #f0e8e4;padding:14px 20px;flex-shrink:0}
+.mch h2{font-size:26px;font-weight:700;color:#532822}
+.mch p{font-size:13px;color:#8a6a65;margin-top:2px}
+.mcb{flex:1;padding:16px;display:flex;flex-direction:column;gap:13px;overflow:hidden}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sc{border-radius:14px;padding:16px;min-height:86px;position:relative;overflow:hidden;transition:transform .45s ease,box-shadow .45s ease}
+.sc.zoom{transform:scale(1.07);box-shadow:0 14px 44px rgba(0,0,0,.2);z-index:2}
+.bgs{position:absolute;right:-16px;bottom:-16px;width:72px;height:72px;border-radius:50%;opacity:.18}
+.sct{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.scn{font-size:28px;font-weight:700;line-height:1}
+.scs{font-size:11px;margin-top:4px;opacity:.75}
+.secc{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6a65;margin-bottom:8px}
+.qar{display:flex;gap:8px}
+.qab{background:#fff;border:none;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:600;color:#532822;box-shadow:0 2px 8px rgba(83,40,34,.07);font-family:inherit}
+.bg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
+.dcard{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(83,40,34,.07)}
+.dcr{display:flex;flex-direction:column;gap:10px}
+.ar{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:.5px solid #f0e8e4}
+.ar:last-child{border-bottom:none}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:11px}
+.an{font-size:14px;font-weight:700;color:#532822}
+.ad{font-size:12px;color:#8a6a65;margin-top:2px}
+.at{font-size:11px;color:#b0a090;margin-top:2px}
+.pr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:.5px solid #f0e8e4}
+.pr:last-child{border-bottom:none}
+.ptag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pamts{text-align:right}
+.pamt{font-size:13px;font-weight:700;color:#532822}
+.pct{font-size:11px;color:#8a6a65}
+.rcr{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid #f0e8e4}
+.rcr:last-child{border-bottom:none}
+.rcn{font-size:13px;font-weight:600;color:#532822}
+.rce{font-size:11px;color:#8a6a65}
+
+/* ══════════════════════════════
+   SCENE 3: MESSAGES
+══════════════════════════════ */
+#s3{background:#532822}
+.msglist{width:280px;min-width:280px;background:#fff;border-right:.5px solid #f0e8e4;display:flex;flex-direction:column;flex-shrink:0}
+.mlhdr{padding:18px 18px 12px;border-bottom:.5px solid #f0e8e4}
+.mlhdr h2{font-size:24px;font-weight:700;color:#532822}
+.citem{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:.5px solid #f5ece8;cursor:pointer;transition:background .1s}
+.citem.on,.citem:hover{background:#FFF8F0}
+.cav{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px}
+.cname{font-size:14px;font-weight:700;color:#532822}
+.cprev{font-size:12px;color:#8a6a65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;margin-top:1px}
+.cbadge{font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;color:#fff;flex-shrink:0;white-space:nowrap;margin-left:auto}
+.thrdarea{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.thrd{flex:1;display:flex;flex-direction:column;background:#FFF8F0;transform:translateX(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.thrd.open{transform:translateX(0)}
+.thrdhdr{background:#fff;border-bottom:.5px solid #f0e8e4;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.thrdname{font-size:15px;font-weight:700;color:#532822}
+.thrdsub{font-size:12px;color:#8a6a65;margin-top:1px}
+.thrdmsgs{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.bt{align-self:flex-start;background:#E9E9EB;color:#1a1a1a;padding:11px 15px;border-radius:14px;border-bottom-left-radius:3px;font-size:14px;line-height:1.5;max-width:65%}
+.bm{align-self:flex-end;background:#0084C5;color:#fff;padding:11px 15px;border-radius:14px;border-bottom-right-radius:3px;font-size:14px;line-height:1.5;max-width:65%;opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s}
+.bm.v{opacity:1;transform:translateY(0)}
+.thrdfooter{background:#fff;border-top:.5px solid #f0e8e4;padding:14px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.rdiv{flex:1;background:#FFF2E9;border:1.5px solid #e8ddd8;border-radius:50px;padding:10px 16px;font-size:14px;font-family:inherit;color:#532822;min-height:42px;display:flex;align-items:center;transition:border-color .2s}
+.rdiv.focused{border-color:#532822}
+.rsend{background:#0084C5;color:#fff;border:none;border-radius:50px;padding:10px 22px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;flex-shrink:0}
+
+/* ══════════════════════════════
+   SCENE 4: PROJECTS
+══════════════════════════════ */
+#s4{background:#532822}
+.pmc{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;background:#FFF2E9}
+.pmch{background:#fff;border-bottom:.5px solid #f0e8e4;padding:14px 20px;flex-shrink:0}
+.pmch h2{font-size:26px;font-weight:700;color:#532822}
+.kbwrap{flex:1;padding:16px;display:flex;flex-direction:column;overflow:hidden}
+.kb{flex:1;display:flex;gap:14px;overflow:hidden}
+.kcol{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.kcolh{display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:8px;flex-shrink:0}
+.kcoll{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8a6a65}
+.kcolc{background:#e8e0db;color:#8a6a65;font-size:11px;font-weight:700;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kcard{background:#fff;border-radius:10px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(83,40,34,.07);transition:box-shadow .25s,transform .25s,opacity .3s}
+.kcard.lift{box-shadow:0 14px 36px rgba(0,0,0,.2);transform:rotate(2deg) scale(1.04)}
+.kcard.hide{opacity:0}
+.kct{font-size:14px;font-weight:600;color:#532822}
+.kcm{font-size:12px;color:#8a6a65;margin-top:4px}
+.kcp{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+#drag-clone{position:absolute;width:290px;background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 14px 36px rgba(0,0,0,.2);transform:rotate(2deg) scale(1.04);z-index:999;pointer-events:none;display:none;transition:left .75s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1),transform .4s ease}
+#drag-clone.drop{transform:rotate(0) scale(1)}
+
+/* ══════════════════════════════
+   SCENE 5: KIKI AI
+══════════════════════════════ */
+#s5{background:#532822}
+.aisb{width:260px;min-width:260px;background:#fff;border-right:.5px solid #f0e8e4;display:flex;flex-direction:column;flex-shrink:0}
+.aisbtp{padding:14px 12px 12px;border-bottom:.5px solid #f0e8e4}
+.ncbtn{width:100%;padding:9px 14px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.aichat{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#FFF2E9}
+.aihdr{background:#fff;border-bottom:.5px solid #f0e8e4;height:60px;padding:0 20px;display:flex;align-items:center;flex-shrink:0}
+.aihdr h2{font-size:32px;font-weight:700;color:#532822}
+.aimsgs{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.aiinner{max-width:720px;width:100%;margin:0 auto;padding:28px 24px 0;display:flex;flex-direction:column;gap:14px}
+.mu{align-self:flex-end;background:#532822;color:#FFF2E9;padding:11px 15px;border-radius:14px;border-bottom-right-radius:4px;font-size:14px;line-height:1.55;max-width:72%;white-space:pre-wrap;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.mu.v{opacity:1;transform:translateY(0)}
+.mb{align-self:flex-start;background:#fff;color:#1a1a1a;border:1px solid #e8e0db;padding:11px 15px;border-radius:14px;border-bottom-left-radius:4px;font-size:14px;line-height:1.55;max-width:72%;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.mb.v{opacity:1;transform:translateY(0)}
+.calcrd{align-self:flex-start;background:#fff;border:1px solid #e8e0db;border-radius:14px;overflow:hidden;max-width:280px;opacity:0;transform:translateY(12px) scale(.97);transition:opacity .4s,transform .4s}
+.calcrd.v{opacity:1;transform:translateY(0) scale(1)}
+.calcrdhdr{background:#44A574;color:#fff;padding:8px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.calcrdbdy{padding:12px 14px}
+.calcrdtl{font-size:14px;font-weight:700;color:#532822}
+.calcrdtm{font-size:12px;color:#8a6a65;margin-top:3px}
+.aicompose{background:#FFF2E9;padding:10px 24px 18px;flex-shrink:0}
+.aicinn{max-width:720px;margin:0 auto;background:#fff;border:1px solid #e8e0db;border-radius:14px;padding:12px 14px;display:flex;align-items:flex-end;gap:10px;transition:border-color .15s,box-shadow .15s}
+.aicinn.focused{border-color:#532822;box-shadow:0 0 0 3px rgba(83,40,34,.07)}
+.aiinput{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:#1a1a1a;background:transparent;min-height:44px;line-height:1.55;display:flex;align-items:center}
+.aiinput::after{content:'|';opacity:0;animation:blink 1s step-end infinite}
+.aiinput.typing::after{opacity:1}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.aisend{padding:8px 20px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+
+/* ══════════════════════════════
+   SCENE 6: END
+══════════════════════════════ */
+#s6{background:#1a0e0b;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#s6t{font-size:44px;font-weight:700;color:#FFF2E9;text-align:center;line-height:1.25;opacity:0;transform:translateY(14px);transition:opacity .8s,transform .8s}
+#s6t.v{opacity:1;transform:translateY(0)}
+#s6s{font-size:16px;color:#8a6a65;margin-top:16px;opacity:0;transition:opacity .8s .4s}
+#s6s.v{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- ══ CURSOR ══ -->
+<div id="cur"><div class="c-dot"></div><div class="c-tail"></div></div>
+
+<!-- ══════════════════════════════════════════════════
+     SCENE 1: BRIEFING
+══════════════════════════════════════════════════ -->
+<div class="scene" id="s1">
+  <div class="s1in">
+    <div class="s1greet">
+      <h1>Good morning, Sarah.</h1>
+      <p>Friday 13 June 2026</p>
+    </div>
+    <div class="s1cards">
+      <div class="bc" id="bc0" style="background:#E05228;color:#FFF2E9">
+        <div class="bc-sh" style="background:#FFF2E9"></div>
+        <div class="bc-t" style="color:#FFF2E9">Open Tasks</div>
+        <div class="bc-n">4</div>
+        <div class="bc-s">2 due today · 1 overdue</div>
+      </div>
+      <div class="bc" id="bc1" style="background:#0084C5;color:#FFF2E9">
+        <div class="bc-sh" style="background:#FFF2E9"></div>
+        <div class="bc-t" style="color:#FFF2E9">Unread Messages</div>
+        <div class="bc-n">6</div>
+        <div class="bc-s">James, Rachel + 4 more</div>
+      </div>
+      <div class="bc" id="bc2" style="background:#44A574;color:#FFF2E9">
+        <div class="bc-sh" style="background:#FFF2E9"></div>
+        <div class="bc-t" style="color:#FFF2E9">Appointments (7d)</div>
+        <div class="bc-n">3</div>
+        <div class="bc-s">Next: Brand strategy call</div>
+      </div>
+      <div class="bc" id="bc3" style="background:#FF9299;color:#FFF2E9">
+        <div class="bc-sh" style="background:#FFF2E9"></div>
+        <div class="bc-t" style="color:#FFF2E9">New Contacts (7d)</div>
+        <div class="bc-n">2</div>
+        <div class="bc-s">This week</div>
+      </div>
+    </div>
+    <button id="s1btn">Enter Dashboard</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SCENE 2: DASHBOARD
+══════════════════════════════════════════════════ -->
+<div class="scene" id="s2">
+  <div class="aw">
+    <div class="sb" id="sb2"></div>
+    <div class="mc">
+      <div class="mch">
+        <h2>Good morning, Sarah.</h2>
+        <p>Friday 13 June 2026 · Here's what's happening today.</p>
+      </div>
+      <div class="mcb">
+        <div class="sgrid">
+          <div class="sc" style="background:#E05228;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">Open Tasks</div><div class="scn">4</div><div class="scs">2 due today · 1 overdue</div></div>
+          <div class="sc" id="sc-msgs" style="background:#0084C5;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">Unread Messages</div><div class="scn">6</div><div class="scs">James, Rachel + 4 more</div></div>
+          <div class="sc" style="background:#44A574;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">Appointments (7d)</div><div class="scn">3</div><div class="scs">Next: Brand strategy call</div></div>
+          <div class="sc" style="background:#FF9299;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">New Contacts (7d)</div><div class="scn">2</div><div class="scs">This week</div></div>
+        </div>
+        <div><div class="secc">Quick Actions</div><div class="qar"><button class="qab">＋ New contact</button><button class="qab">＋ New task</button><button class="qab">＋ New conversation</button><button class="qab">＋ New invoice</button></div></div>
+        <div class="bg2">
+          <div class="dcard">
+            <div class="secc">Recent Activity</div>
+            <div class="ar"><div class="av" style="width:30px;height:30px;background:#FFD05D;color:#532822">JH</div><div><div class="an">James Hartley</div><div class="ad">"Hey Sarah, love the brand deck direction…"</div><div class="at">2h ago</div></div></div>
+            <div class="ar"><div class="av" style="width:30px;height:30px;background:#FF9299;color:#7a1a22">RV</div><div><div class="an">Rachel Vance</div><div class="ad">New message received</div><div class="at">4h ago</div></div></div>
+            <div class="ar"><div class="av" style="width:30px;height:30px;background:#44A574;color:#fff">TO</div><div><div class="an">Tom Okello</div><div class="ad">Invoice viewed</div><div class="at">Yesterday</div></div></div>
+          </div>
+          <div class="dcr">
+            <div class="dcard">
+              <div class="secc">Payments</div>
+              <div class="pr"><span class="ptag" style="color:#8a6a65">Draft</span><div class="pamts"><div class="pamt">$2,400</div><div class="pct">2 invoices</div></div></div>
+              <div class="pr"><span class="ptag" style="color:#E05228">Due</span><div class="pamts"><div class="pamt">$1,800</div><div class="pct">1 invoice</div></div></div>
+              <div class="pr"><span class="ptag" style="color:#44A574">Received</span><div class="pamts"><div class="pamt">$6,500</div><div class="pct">3 invoices</div></div></div>
+            </div>
+            <div class="dcard">
+              <div class="secc">Recent Contacts</div>
+              <div class="rcr"><div class="av" style="width:28px;height:28px;background:#FFD05D;color:#532822">JH</div><div><div class="rcn">James Hartley</div><div class="rce">james@bloomstudio.com</div></div></div>
+              <div class="rcr"><div class="av" style="width:28px;height:28px;background:#FF9299;color:#7a1a22">RV</div><div><div class="rcn">Rachel Vance</div><div class="rce">rachel@vancedesign.co</div></div></div>
+              <div class="rcr"><div class="av" style="width:28px;height:28px;background:#44A574;color:#fff">TO</div><div><div class="rcn">Tom Okello</div><div class="rce">tom@okellobrands.com</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SCENE 3: MESSAGES
+══════════════════════════════════════════════════ -->
+<div class="scene" id="s3">
+  <div class="aw">
+    <div class="sb" id="sb3"></div>
+    <div class="msglist">
+      <div class="mlhdr"><h2>Messages</h2></div>
+      <div class="citem on" id="ci-james">
+        <div class="cav" style="width:40px;height:40px;background:#FFD05D;color:#532822">JH</div>
+        <div style="flex:1;min-width:0">
+          <div class="cname">James Hartley</div>
+          <div class="cprev">Hey Sarah, just reviewed…</div>
+        </div>
+        <div class="cbadge" style="background:#7c3aed">Slack</div>
+      </div>
+      <div class="citem">
+        <div class="cav" style="width:40px;height:40px;background:#FF9299;color:#7a1a22">RV</div>
+        <div style="flex:1;min-width:0">
+          <div class="cname">Rachel Vance</div>
+          <div class="cprev">When are you free to chat?</div>
+        </div>
+        <div class="cbadge" style="background:#25D366">WhatsApp</div>
+      </div>
+      <div class="citem">
+        <div class="cav" style="width:40px;height:40px;background:#44A574;color:#fff">TO</div>
+        <div style="flex:1;min-width:0">
+          <div class="cname">Tom Okello</div>
+          <div class="cprev">Invoice received, thanks!</div>
+        </div>
+        <div class="cbadge" style="background:#0084C5">Email</div>
+      </div>
+    </div>
+    <div class="thrdarea">
+      <div class="thrd" id="s3-thrd">
+        <div class="thrdhdr">
+          <div class="av" style="width:36px;height:36px;background:#FFD05D;color:#532822;font-size:12px">JH</div>
+          <div><div class="thrdname">James Hartley · Bloom Studio</div><div class="thrdsub">Slack · Active now</div></div>
+        </div>
+        <div class="thrdmsgs">
+          <div class="bt">"Hey Sarah, just reviewed the latest brand deck and love the direction! The colour palette is exactly what we were after."</div>
+        </div>
+        <div class="thrdfooter">
+          <div class="rdiv" id="s3-input"></div>
+          <button class="rsend">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SCENE 4: PROJECTS
+══════════════════════════════════════════════════ -->
+<div class="scene" id="s4">
+  <div class="aw">
+    <div class="sb" id="sb4"></div>
+    <div class="pmc">
+      <div class="pmch"><h2>Projects</h2></div>
+      <div class="kbwrap">
+        <div class="kb">
+          <div class="kcol" id="kc-ip">
+            <div class="kcolh"><span class="kcoll">In Progress</span><span class="kcolc">2</span></div>
+            <div class="kcard" id="kc-brand">
+              <div class="kct">Finalise brand guidelines</div>
+              <div class="kcm">Bloom Studio</div>
+              <div class="kcp" style="background:#FFF0C2;color:#7a4a10">In Progress</div>
+            </div>
+            <div class="kcard">
+              <div class="kct">Invoice approval – Bloom Studio</div>
+              <div class="kcm">Finance · Due Mon</div>
+              <div class="kcp" style="background:#D6EAFF;color:#0a3a6e">Review</div>
+            </div>
+          </div>
+          <div class="kcol">
+            <div class="kcolh"><span class="kcoll">Upcoming</span><span class="kcolc">1</span></div>
+            <div class="kcard">
+              <div class="kct">Draft social content</div>
+              <div class="kcm">Rachel Vance</div>
+              <div class="kcp" style="background:#F0E8FE;color:#5b21b6">Upcoming</div>
+            </div>
+          </div>
+          <div class="kcol" id="kc-done">
+            <div class="kcolh"><span class="kcoll">Completed</span><span class="kcolc" id="done-count">0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="drag-clone">
+    <div class="kct">Finalise brand guidelines</div>
+    <div class="kcm">Bloom Studio</div>
+    <div class="kcp" style="background:#FFF0C2;color:#7a4a10">In Progress</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SCENE 5: KIKI AI
+══════════════════════════════════════════════════ -->
+<div class="scene" id="s5">
+  <div class="aw" style="background:#FFF2E9">
+    <div class="aisb">
+      <div class="aisbtp"><button class="ncbtn">＋ New chat</button></div>
+      <div style="padding:6px">
+        <div style="font-size:11px;font-weight:700;color:#9b9b9b;text-transform:uppercase;letter-spacing:.6px;padding:10px 8px 4px">Today</div>
+        <div style="padding:8px 12px;border-radius:8px;background:#FFF2E9;font-size:14px;font-weight:500;color:#1a1a1a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Brand identity project…</div>
+        <div style="font-size:11px;font-weight:700;color:#9b9b9b;text-transform:uppercase;letter-spacing:.6px;padding:10px 8px 4px">Yesterday</div>
+        <div style="padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:#6b6b6b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Client onboarding flow</div>
+        <div style="padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:#6b6b6b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Q2 invoice summary</div>
+      </div>
+    </div>
+    <div class="aichat">
+      <div class="aihdr"><h2>Kiki AI</h2></div>
+      <div class="aimsgs">
+        <div class="aiinner" id="ai-msgs"></div>
+      </div>
+      <div class="aicompose">
+        <div class="aicinn" id="ai-compose">
+          <div class="aiinput" id="ai-input"></div>
+          <button class="aisend">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     SCENE 6: END
+══════════════════════════════════════════════════ -->
+<div class="scene" id="s6">
+  <div id="s6t">Your clients. Your business.<br>One place.</div>
+  <div id="s6s">wearekiki.com</div>
+</div>
+
+<script>
+// ── Utilities ──────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+// ── Sidebar HTML ───────────────────────────────────────
+const SB_ICONS = [
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
+];
+const SB_ICONS2 = [
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2"/></svg>',
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M20 12h-2M6 12H4M12 4V2M12 22v-2"/></svg>',
+];
+const LOGO_SVG = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#532822"/><path d="M8 8L8 20M8 14L15 8M8 14L15 20" stroke="#FFD05D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="14" r="2.5" fill="#FFD05D"/></svg>';
+const NAV1 = ['Dashboard','Messages','Projects','Kiki AI','Payments'];
+const NAV2 = ['Contacts','Calendars','Opportunities','Marketing','Automation','Media Storage','Reputation','Set Up','Settings'];
+
+function buildSidebar(el, active) {
+  let h = `<div class="sbl">${LOGO_SVG}<span class="sblt">kiki</span></div>`;
+  h += `<div class="sbloc"><span>Bloom Studio</span><span style="color:#8a6a65;font-size:10px">▾</span></div>`;
+  h += `<div class="sbn">`;
+  NAV1.forEach((n,i) => { h += `<div class="sbi${n===active?' on':''}">${SB_ICONS[i]}<span>${n}</span></div>`; });
+  h += `<div class="sbdiv"></div>`;
+  NAV2.forEach((n,i) => { h += `<div class="sbi">${SB_ICONS2[i]}<span>${n}</span></div>`; });
+  h += `</div>`;
+  el.innerHTML = h;
+}
+
+buildSidebar($('sb2'),'Dashboard');
+buildSidebar($('sb3'),'Messages');
+buildSidebar($('sb4'),'Projects');
+
+// ── Cursor ─────────────────────────────────────────────
+const cur = $('cur');
+let curX = 700, curY = 450;
+
+function moveCursor(x, y, dur = 900) {
+  return new Promise(r => {
+    cur.style.transition = `left ${dur}ms cubic-bezier(.4,0,.2,1), top ${dur}ms cubic-bezier(.4,0,.2,1), opacity .3s`;
+    cur.style.left = x + 'px';
+    cur.style.top  = y + 'px';
+    curX = x; curY = y;
+    setTimeout(r, dur);
+  });
+}
+
+async function click(x, y) {
+  if (x !== undefined) await moveCursor(x, y, 700);
+  cur.classList.add('clicking');
+  await wait(180);
+  cur.classList.remove('clicking');
+  await wait(80);
+}
+
+function cursorHide() { cur.style.opacity = '0'; }
+function cursorShow() { cur.style.opacity = '1'; }
+
+// ── Scene switching ─────────────────────────────────────
+let activeScene = null;
+async function showScene(id) {
+  if (activeScene) activeScene.classList.remove('on');
+  await wait(40);
+  activeScene = $(id);
+  activeScene.classList.add('on');
+  await wait(400);
+}
+
+// ── Typing ─────────────────────────────────────────────
+async function typeInto(el, text, mpc = 42) {
+  el.classList.add('typing');
+  for (const ch of text) {
+    el.textContent += ch;
+    await wait(mpc + (Math.random() * 20 - 10));
+  }
+  el.classList.remove('typing');
+}
+
+async function typeWords(el, text, mpw = 130) {
+  const words = text.split(' ');
+  el.textContent = '';
+  el.classList.add('v');
+  for (let i = 0; i < words.length; i++) {
+    el.textContent += (i ? ' ' : '') + words[i];
+    await wait(mpw);
+  }
+}
+
+// ── RESET helpers ───────────────────────────────────────
+function resetAll() {
+  // Scene 1
+  ['bc0','bc1','bc2','bc3'].forEach(id => $(id).classList.remove('v'));
+  $('s1btn').classList.remove('v');
+  // Scene 2
+  $('sc-msgs').classList.remove('zoom');
+  // Scene 3
+  $('s3-thrd').classList.remove('open');
+  $('s3-input').textContent = '';
+  $('s3-input').classList.remove('focused');
+  // Scene 4
+  const brand = $('kc-brand');
+  brand.classList.remove('lift','hide');
+  $('kc-ip').querySelector('.kcolh').querySelector('.kcolc').textContent = '2';
+  const done = $('kc-done');
+  const existing = done.querySelectorAll('.kcard');
+  existing.forEach(c => c.remove());
+  $('done-count').textContent = '0';
+  $('drag-clone').style.display = 'none';
+  $('drag-clone').classList.remove('drop');
+  // Scene 5
+  $('ai-msgs').innerHTML = '';
+  $('ai-input').textContent = '';
+  $('ai-input').classList.remove('typing');
+  $('ai-compose').classList.remove('focused');
+  // Scene 6
+  $('s6t').classList.remove('v');
+  $('s6s').classList.remove('v');
+}
+
+// ══════════════════════════════════════════════════════════
+// SCENE 1: BRIEFING
+// ══════════════════════════════════════════════════════════
+async function scene1() {
+  cursorHide();
+  await showScene('s1');
+  await wait(600);
+
+  // Stagger cards
+  for (let i = 0; i < 4; i++) {
+    $('bc'+i).classList.add('v');
+    await wait(160);
+  }
+  await wait(400);
+  $('s1btn').classList.add('v');
+  await wait(700);
+
+  // Cursor appears at centre, moves to button
+  cur.style.transition = 'none';
+  cur.style.left = '700px';
+  cur.style.top  = '370px';
+  cursorShow();
+  await wait(60);
+
+  // Button is centred at ~(700, 660) — estimate based on flex layout
+  await click(700, 660);
+  await wait(300);
+}
+
+// ══════════════════════════════════════════════════════════
+// SCENE 2: DASHBOARD
+// ══════════════════════════════════════════════════════════
+async function scene2() {
+  cursorHide();
+  await showScene('s2');
+  cursorShow();
+
+  // Move cursor across stat cards
+  // App window: left=60, top=56. Sidebar=220. Content starts at x=280
+  // Header ≈60px. Body starts at y=56+60+16=132. Card height ~86px, center y≈175
+  // 4 cards, content width=1240-220-32=988, card+gap ≈ 249
+  // Card centers x: 280+16+~120=416, 665, 914, 1135
+  await moveCursor(416, 190, 1000);
+  await wait(400);
+  await moveCursor(660, 190, 900);
+  await wait(500);
+
+  // Zoom into Unread Messages
+  $('sc-msgs').classList.add('zoom');
+  await wait(1200);
+  $('sc-msgs').classList.remove('zoom');
+  await wait(400);
+
+  await moveCursor(910, 190, 900);
+  await wait(300);
+  await moveCursor(1136, 190, 900);
+  await wait(800);
+}
+
+// ══════════════════════════════════════════════════════════
+// SCENE 3: MESSAGES
+// ══════════════════════════════════════════════════════════
+async function scene3() {
+  cursorHide();
+  await showScene('s3');
+  cursorShow();
+
+  // Conv list: x=60+220+140=420, James is first item y≈56+60+60+30=206
+  await moveCursor(420, 210, 800);
+  await wait(300);
+  await click(420, 210);
+
+  // Thread slides in
+  $('s3-thrd').classList.add('open');
+  await wait(700);
+
+  // Reply input: thread takes x=60+220+280=560 to x=1300, center x=930
+  // Reply box at bottom: y = 56+790-44 = 802
+  const inputEl = $('s3-input');
+  await moveCursor(820, 800, 900);
+  await wait(200);
+  await click(820, 800);
+  inputEl.classList.add('focused');
+  await wait(300);
+
+  await typeInto(inputEl, 'Thanks James, really glad you like it!', 45);
+  await wait(400);
+
+  // Send button: rightmost at ~x=1190
+  await click(1190, 800);
+  inputEl.classList.remove('focused');
+
+  // New bubble animates in
+  const bm = document.createElement('div');
+  bm.className = 'bm';
+  bm.textContent = 'Thanks James, really glad you like it!';
+  $('s3-thrd').querySelector('.thrdmsgs').appendChild(bm);
+  await wait(80);
+  bm.classList.add('v');
+  inputEl.textContent = '';
+  await wait(1200);
+}
+
+// ══════════════════════════════════════════════════════════
+// SCENE 4: PROJECTS
+// ══════════════════════════════════════════════════════════
+async function scene4() {
+  cursorHide();
+  await showScene('s4');
+  cursorShow();
+
+  // Card coords: sidebar=220, padding=16
+  // Content width = 1240-220-32 = 988, 3 cols w/ 2×14px gap = (988-28)/3 = 320px
+  // In Progress col center x = 60+220+16+160 = 456
+  // Card top: header ~60px, body starts y=56+60+16=132, col header=~52px, card at y≈184+30=214
+  const card = $('kc-brand');
+  await moveCursor(456, 230, 900);
+  await wait(400);
+
+  // Lift card
+  card.classList.add('lift');
+  await wait(300);
+
+  // Create drag clone at card's position
+  const clone = $('drag-clone');
+  const rect = card.getBoundingClientRect();
+  // rect relative to body (1400×900 canvas)
+  clone.style.left = rect.left + 'px';
+  clone.style.top  = rect.top + 'px';
+  clone.style.display = 'block';
+  card.classList.add('hide');
+
+  await wait(80);
+
+  // Completed col: x = 60+220+16+320+14+320+14+160 = 1124
+  // Animate cursor and clone together
+  const DEST_X = 1100;
+  const DEST_Y = 195;
+  await Promise.all([
+    moveCursor(DEST_X + 145, DEST_Y + 30, 900),
+    new Promise(r => {
+      clone.style.transition = 'left .85s cubic-bezier(.4,0,.2,1), top .5s cubic-bezier(.4,0,.2,1), transform .4s ease';
+      clone.style.left = DEST_X + 'px';
+      clone.style.top  = DEST_Y + 'px';
+      setTimeout(r, 900);
+    })
+  ]);
+
+  // Drop
+  clone.classList.add('drop');
+  await wait(300);
+  clone.style.display = 'none';
+
+  // Add card to Completed column
+  const done = $('kc-done');
+  const newCard = document.createElement('div');
+  newCard.className = 'kcard';
+  newCard.style.opacity = '0';
+  newCard.style.transition = 'opacity .35s ease';
+  newCard.innerHTML = `<div class="kct">Finalise brand guidelines</div><div class="kcm">Bloom Studio</div><div class="kcp" style="background:#D4FAE4;color:#166534">Completed</div>`;
+  done.appendChild(newCard);
+  $('done-count').textContent = '1';
+  await wait(40);
+  newCard.style.opacity = '1';
+  await wait(1200);
+}
+
+// ══════════════════════════════════════════════════════════
+// SCENE 5: KIKI AI
+// ══════════════════════════════════════════════════════════
+async function scene5() {
+  cursorHide();
+  await showScene('s5');
+  cursorShow();
+
+  const msgs = $('ai-msgs');
+  const input = $('ai-input');
+  const compose = $('ai-compose');
+
+  // Cursor moves to input box
+  // AI sidebar=260, content x=60+260=320, chat area width=980
+  // Composer max-width=720, centred in 980 → margin=130
+  // Composer left: 60+260+130=450, right: 450+720=1170
+  // Send btn: x~1150, Input centre: x~750
+  // Composer y: 56+790-80=766
+  await moveCursor(750, 770, 900);
+  await wait(300);
+  await click(750, 770);
+  compose.classList.add('focused');
+  await wait(300);
+
+  // Type first prompt
+  const P1 = 'Send invoice to James at Bloom Studio for brand identity project — $4,200';
+  await typeInto(input, P1, 38);
+  await wait(400);
+
+  // Click send
+  await click(1150, 770);
+  compose.classList.remove('focused');
+
+  // User message appears
+  const u1 = document.createElement('div');
+  u1.className = 'mu';
+  u1.textContent = P1;
+  msgs.appendChild(u1);
+  await wait(60);
+  u1.classList.add('v');
+  input.textContent = '';
+  await wait(600);
+
+  // AI response word by word
+  const b1 = document.createElement('div');
+  b1.className = 'mb';
+  msgs.appendChild(b1);
+  await wait(40);
+  b1.classList.add('v');
+  await typeWords(b1, 'Done! Invoice for $4,200 sent to James Hartley at Bloom Studio. 📄', 120);
+  await wait(900);
+
+  // Second prompt
+  await click(750, 770);
+  compose.classList.add('focused');
+  await wait(300);
+
+  const P2 = 'Book a strategy call with Rachel on Friday at 2pm';
+  await typeInto(input, P2, 40);
+  await wait(400);
+  await click(1150, 770);
+  compose.classList.remove('focused');
+
+  const u2 = document.createElement('div');
+  u2.className = 'mu';
+  u2.textContent = P2;
+  msgs.appendChild(u2);
+  await wait(60);
+  u2.classList.add('v');
+  input.textContent = '';
+  await wait(700);
+
+  // AI response + calendar card
+  const b2 = document.createElement('div');
+  b2.className = 'mb';
+  msgs.appendChild(b2);
+  await wait(40);
+  b2.classList.add('v');
+  await typeWords(b2, 'Done! Strategy call with Rachel Vance booked for Friday 20 June at 2:00 pm. 📅', 110);
+  await wait(300);
+
+  const calCard = document.createElement('div');
+  calCard.className = 'calcrd';
+  calCard.innerHTML = `<div class="calcrdhdr">📅 Calendar · Booked</div><div class="calcrdbdy"><div class="calcrdtl">Strategy Call — Rachel Vance</div><div class="calcrdtm">Friday 20 June · 2:00 pm</div></div>`;
+  msgs.appendChild(calCard);
+  await wait(60);
+  calCard.classList.add('v');
+  await wait(1800);
+}
+
+// ══════════════════════════════════════════════════════════
+// SCENE 6: END
+// ══════════════════════════════════════════════════════════
+async function scene6() {
+  cursorHide();
+  await showScene('s6');
+  await wait(300);
+  $('s6t').classList.add('v');
+  $('s6s').classList.add('v');
+  await wait(2800);
+}
+
+// ══════════════════════════════════════════════════════════
+// MAIN LOOP
+// ══════════════════════════════════════════════════════════
+async function run() {
+  resetAll();
+  await scene1();
+  await scene2();
+  await scene3();
+  await scene4();
+  await scene5();
+  await scene6();
+  // Fade out
+  if (activeScene) activeScene.classList.remove('on');
+  await wait(500);
+  run();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  cursorHide();
+  run();
+});
+</script>
+</body>
+</html>
