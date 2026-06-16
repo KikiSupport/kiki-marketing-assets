@@ -4,267 +4,373 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1400">
 <title>Kiki — Demo</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{width:1400px;height:900px;background:#532822;font-family:'Plus Jakarta Sans',sans-serif;overflow:hidden;position:relative;cursor:none}
 
-/* ── Scenes ── */
-.scene{position:absolute;inset:0;opacity:0;transition:opacity .4s ease;pointer-events:none}
-.scene.on{opacity:1}
-
 /* ── Cursor ── */
-#cur{position:absolute;left:700px;top:450px;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);transition:left .85s cubic-bezier(.4,0,.2,1),top .85s cubic-bezier(.4,0,.2,1),opacity .3s}
+#cur{position:absolute;left:700px;top:450px;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);transition:left .6s cubic-bezier(.4,0,.2,1),top .6s cubic-bezier(.4,0,.2,1),opacity .3s}
 .c-dot{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.93);box-shadow:0 2px 10px rgba(0,0,0,.28);transition:transform .15s}
 .c-tail{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:9px solid rgba(255,255,255,.55)}
 #cur.clicking .c-dot{transform:scale(.72)}
 
-/* ══════════════════════════════
-   SCENE 1: BRIEFING
-══════════════════════════════ */
+/* ── Scenes ── */
+.scene{position:absolute;inset:0;opacity:0;transition:opacity .3s ease;pointer-events:none}
+.scene.on{opacity:1}
+
+/* ══ APP WINDOW ══ */
+.aw{position:absolute;top:56px;left:60px;width:1240px;height:790px;border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,.4);overflow:hidden;display:flex;background:#FFF2E9}
+
+/* ══ GHL SIDEBAR ══ */
+.gsb{width:220px;min-width:220px;background:#FFF2E9;border-right:.5px solid #e8ddd8;display:flex;flex-direction:column;flex-shrink:0}
+.gsb-logo{padding:14px 16px 10px;border-bottom:.5px solid #e8ddd8}
+.gsb-loc{margin:8px 12px;background:#fff;border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border:.5px solid #e8ddd8;font-size:12px;font-weight:600;color:#532822;white-space:nowrap;overflow:hidden}
+.gsb-nav{padding:3px 8px;flex:1;overflow:hidden}
+.gsb-i{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:9px;margin-bottom:1px;font-size:13px;font-weight:600;color:#8a6a65}
+.gsb-i.on{background:#FFD05D;color:#532822}
+.gsb-div{height:.5px;background:#e8ddd8;margin:5px 10px}
+.gsb-i svg{flex-shrink:0;opacity:.7}
+.gsb-i.on svg{opacity:1}
+
+/* ══ SCENE 1: BRIEFING ══ */
 #s1{background:#FFF2E9;display:flex;align-items:center;justify-content:center}
-.s1in{display:flex;flex-direction:column;align-items:center;gap:36px}
-.s1greet{text-align:center}
-.s1greet h1{font-size:54px;font-weight:700;color:#532822;line-height:1}
-.s1greet p{font-size:18px;color:#8a6a65;margin-top:10px}
-.s1cards{display:flex;gap:16px}
-.bc{width:210px;border-radius:16px;padding:20px;position:relative;overflow:hidden;opacity:0;transform:translateY(22px);transition:opacity .5s ease,transform .5s ease}
+.brief-inner{display:flex;flex-direction:column;align-items:center;gap:28px}
+.brief-eyebrow{font-size:12px;font-weight:600;color:#8a6a65;text-transform:uppercase;letter-spacing:.1em;text-align:center}
+.brief-title{font-size:52px;font-weight:700;color:#532822;letter-spacing:-.5px;line-height:1;text-align:center}
+.brief-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:520px}
+.bc{border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;display:flex;flex-direction:column;opacity:0;transform:translateY(18px);transition:opacity .42s ease,transform .42s ease}
 .bc.v{opacity:1;transform:translateY(0)}
-.bc-sh{position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;opacity:.18}
-.bc-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
-.bc-n{font-size:40px;font-weight:700;line-height:1}
-.bc-s{font-size:12px;margin-top:5px;opacity:.75}
-#s1btn{background:#532822;color:#FFF2E9;border:none;border-radius:50px;padding:14px 40px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;opacity:0;transition:opacity .5s ease;animation:pbtn 2s ease-in-out infinite}
-#s1btn.v{opacity:1}
-@keyframes pbtn{0%,100%{box-shadow:0 0 0 0 rgba(83,40,34,.4)}50%{box-shadow:0 0 0 14px rgba(83,40,34,0)}}
+.bc-bg{position:absolute;right:-16px;bottom:-16px;width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.18)}
+.bc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;opacity:.75}
+.bc-num{font-size:28px;font-weight:700;line-height:1;margin-bottom:8px}
+.bc-row{font-size:12px;display:flex;align-items:center;gap:5px;opacity:.88;margin-bottom:2px}
+.brief-go{padding:12px 40px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;cursor:pointer;font-weight:600;opacity:0;transition:opacity .38s;animation:pbtn 2s ease-in-out infinite}
+.brief-go.v{opacity:1}
+@keyframes pbtn{0%,100%{box-shadow:0 0 0 0 rgba(83,40,34,.38)}55%{box-shadow:0 0 0 14px rgba(83,40,34,0)}}
 
-/* ══════════════════════════════
-   SHARED: App Window + Sidebar
-══════════════════════════════ */
-.aw{position:absolute;top:56px;left:60px;width:1240px;height:790px;border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,.4);overflow:hidden;display:flex}
-.sb{width:220px;min-width:220px;background:#FFF2E9;border-right:.5px solid #e8ddd8;display:flex;flex-direction:column;flex-shrink:0}
-.sbl{padding:20px 20px 16px;border-bottom:.5px solid #e8ddd8;display:flex;align-items:center;gap:8px}
-.sblt{font-size:20px;font-weight:700;color:#532822}
-.sbloc{margin:12px 14px;background:#fff;border-radius:10px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;border:.5px solid #e8ddd8;font-size:12px;font-weight:600;color:#532822}
-.sbn{padding:4px 10px;flex:1;overflow:hidden}
-.sbi{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;margin-bottom:1px;font-size:13px;font-weight:600;color:#8a6a65}
-.sbi.on{background:#FFD05D;color:#532822}
-.sbi svg{flex-shrink:0;color:inherit}
-.sbdiv{height:.5px;background:#e8ddd8;margin:6px 10px}
-
-/* ══════════════════════════════
-   SCENE 2: DASHBOARD
-══════════════════════════════ */
+/* ══ SCENE 2: HOME / DASHBOARD ══ */
 #s2{background:#532822}
-.mc{flex:1;display:flex;flex-direction:column;min-width:0;background:#FFF2E9;overflow:hidden}
-.mch{background:#fff;border-bottom:.5px solid #f0e8e4;padding:14px 20px;flex-shrink:0}
-.mch h2{font-size:26px;font-weight:700;color:#532822}
-.mch p{font-size:13px;color:#8a6a65;margin-top:2px}
-.mcb{flex:1;padding:16px;display:flex;flex-direction:column;gap:13px;overflow:hidden}
-.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.sc{border-radius:14px;padding:16px;min-height:86px;position:relative;overflow:hidden;transition:transform .45s ease,box-shadow .45s ease}
-.sc.zoom{transform:scale(1.07);box-shadow:0 14px 44px rgba(0,0,0,.2);z-index:2}
-.bgs{position:absolute;right:-16px;bottom:-16px;width:72px;height:72px;border-radius:50%;opacity:.18}
-.sct{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
-.scn{font-size:28px;font-weight:700;line-height:1}
-.scs{font-size:11px;margin-top:4px;opacity:.75}
-.secc{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6a65;margin-bottom:8px}
-.qar{display:flex;gap:8px}
-.qab{background:#fff;border:none;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:600;color:#532822;box-shadow:0 2px 8px rgba(83,40,34,.07);font-family:inherit}
-.bg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
-.dcard{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(83,40,34,.07)}
-.dcr{display:flex;flex-direction:column;gap:10px}
-.ar{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:.5px solid #f0e8e4}
-.ar:last-child{border-bottom:none}
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:11px}
-.an{font-size:14px;font-weight:700;color:#532822}
-.ad{font-size:12px;color:#8a6a65;margin-top:2px}
-.at{font-size:11px;color:#b0a090;margin-top:2px}
-.pr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:.5px solid #f0e8e4}
-.pr:last-child{border-bottom:none}
-.ptag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.pamts{text-align:right}
-.pamt{font-size:13px;font-weight:700;color:#532822}
-.pct{font-size:11px;color:#8a6a65}
-.rcr{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid #f0e8e4}
-.rcr:last-child{border-bottom:none}
-.rcn{font-size:13px;font-weight:600;color:#532822}
-.rce{font-size:11px;color:#8a6a65}
+.pg-content{flex:1;display:flex;flex-direction:column;min-width:0;background:#FFF2E9;position:relative;overflow:hidden}
+.dash-hdr{background:#fff;border-bottom:.5px solid #f0e8e4;padding:16px 20px;flex-shrink:0}
+.dash-hdr h2{font-size:32px;font-weight:700;color:#532822}
+.dash-hdr p{font-size:13px;color:#8a6a65;margin-top:2px}
+.pg-body{flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.sec-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6a65;margin-bottom:6px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{border-radius:14px;padding:16px;min-height:88px;position:relative;overflow:hidden;transition:transform .38s ease,box-shadow .38s ease}
+.stat-card.zoom{transform:scale(1.06);box-shadow:0 12px 40px rgba(0,0,0,.18);z-index:2}
+.sc-bg{position:absolute;right:-16px;bottom:-16px;width:72px;height:72px;border-radius:50%;opacity:.18}
+.sc-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.sc-n{font-size:28px;font-weight:700;line-height:1}
+.sc-s{font-size:11px;margin-top:4px;opacity:.8}
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qa-btn{background:#fff;border:none;border-radius:50px;padding:9px 14px;font-size:13px;font-weight:600;color:#532822;box-shadow:0 2px 8px rgba(83,40,34,.07);font-family:inherit}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
+.card{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(83,40,34,.07)}
+.act-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:.5px solid #f0e8e4}
+.act-item:last-child{border-bottom:none}
+.act-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.act-name{font-size:14px;font-weight:700;color:#532822}
+.act-desc{font-size:12px;color:#8a6a65;margin-top:1px}
+.act-time{font-size:11px;color:#b0a090;margin-top:1px}
+.pay-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid #f0e8e4}
+.pay-row:last-child{border-bottom:none}
+.pay-tag{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pay-amt{font-size:13px;font-weight:700;color:#532822}
+.pay-ct{font-size:11px;color:#8a6a65;margin-top:1px}
+.rc-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:.5px solid #f0e8e4}
+.rc-item:last-child{border-bottom:none}
+.rc-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.rc-name{font-size:13px;font-weight:600;color:#532822}
+.rc-email{font-size:11px;color:#8a6a65;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* ══════════════════════════════
-   SCENE 3: MESSAGES
-══════════════════════════════ */
+/* Calendar toggle + panel */
+#cal-toggle{position:absolute;top:14px;right:16px;width:34px;height:34px;background:transparent;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background .15s}
+#cal-toggle.active{background:#FFD05D}
+#cal-panel{position:absolute;top:0;right:0;width:282px;height:100%;background:#fff;box-shadow:-4px 0 16px rgba(83,40,34,.12);z-index:10;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+#cal-panel.open{transform:translateX(0)}
+.cal-crd-mini{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(83,40,34,.07)}
+.cal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cal-month-lbl{font-size:13px;font-weight:700;color:#532822}
+.cal-nav-btn{font-size:14px;color:#8a6a65;background:none;border:none;cursor:pointer}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-dl{font-size:9px;font-weight:700;color:#8a6a65;padding:2px 0}
+.cal-d{font-size:11px;color:#532822;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.cal-d.today{background:#FFD05D;font-weight:700}
+.cal-d.other{color:#c9b8b4}
+.cal-d.evt{position:relative}
+.cal-d.evt::after{content:'';width:4px;height:4px;background:#FF834C;border-radius:50%;position:absolute;bottom:-2px;left:50%;transform:translateX(-50%)}
+.tl-crd{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(83,40,34,.07)}
+.tl-hdr-lbl{font-size:13px;font-weight:700;color:#532822;margin-bottom:12px}
+.tl-appt{border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.tl-appt-name{font-size:14px;font-weight:700}
+.tl-appt-who{font-size:12px;margin-top:2px;opacity:.85}
+.tl-appt-when{font-size:11px;margin-top:3px;opacity:.75}
+
+/* ══ SCENE 3: MESSAGES ══ */
 #s3{background:#532822}
-.msglist{width:280px;min-width:280px;background:#fff;border-right:.5px solid #f0e8e4;display:flex;flex-direction:column;flex-shrink:0}
-.mlhdr{padding:18px 18px 12px;border-bottom:.5px solid #f0e8e4}
-.mlhdr h2{font-size:24px;font-weight:700;color:#532822}
-.citem{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:.5px solid #f5ece8;cursor:pointer;transition:background .1s}
-.citem.on,.citem:hover{background:#FFF8F0}
-.cav{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px}
-.cname{font-size:14px;font-weight:700;color:#532822}
-.cprev{font-size:12px;color:#8a6a65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;margin-top:1px}
-.cbadge{font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;color:#fff;flex-shrink:0;white-space:nowrap;margin-left:auto}
-.thrdarea{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
-.thrd{flex:1;display:flex;flex-direction:column;background:#FFF8F0;transform:translateX(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
-.thrd.open{transform:translateX(0)}
-.thrdhdr{background:#fff;border-bottom:.5px solid #f0e8e4;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
-.thrdname{font-size:15px;font-weight:700;color:#532822}
-.thrdsub{font-size:12px;color:#8a6a65;margin-top:1px}
-.thrdmsgs{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
-.bt{align-self:flex-start;background:#E9E9EB;color:#1a1a1a;padding:11px 15px;border-radius:14px;border-bottom-left-radius:3px;font-size:14px;line-height:1.5;max-width:65%}
-.bm{align-self:flex-end;background:#0084C5;color:#fff;padding:11px 15px;border-radius:14px;border-bottom-right-radius:3px;font-size:14px;line-height:1.5;max-width:65%;opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s}
-.bm.v{opacity:1;transform:translateY(0)}
-.thrdfooter{background:#fff;border-top:.5px solid #f0e8e4;padding:14px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.rdiv{flex:1;background:#FFF2E9;border:1.5px solid #e8ddd8;border-radius:50px;padding:10px 16px;font-size:14px;font-family:inherit;color:#532822;min-height:42px;display:flex;align-items:center;transition:border-color .2s}
-.rdiv.focused{border-color:#532822}
-.rsend{background:#0084C5;color:#fff;border:none;border-radius:50px;padding:10px 22px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;flex-shrink:0}
+.msg-left{width:260px;min-width:260px;background:#fff;border-right:.5px solid #f0e8e4;display:flex;flex-direction:column;flex-shrink:0}
+.ml-hdr{padding:16px 18px 8px}
+.ml-hdr h2{font-size:32px;font-weight:700;color:#532822}
+.ml-search{margin:0 18px 8px;display:flex;align-items:center;gap:7px;background:#fff;border:.5px solid #f0e8e4;border-radius:10px;padding:7px 11px}
+.ml-search-ph{font-size:13px;color:#b5a09c}
+.ml-filter{padding:5px 18px 8px;border-bottom:.5px solid #f0e8e4}
+.ml-filter-sel{background:#FFF2E9;border:none;border-radius:8px;padding:5px 10px;font-size:13px;font-weight:600;color:#532822;font-family:inherit}
+.conv-item{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:.5px solid #f5ece8;cursor:pointer}
+.conv-item.active{background:#FFF8F0}
+.conv-av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;width:38px;height:38px;font-size:13px}
+.conv-name{font-size:14px;font-weight:700;color:#532822;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-prev{font-size:12px;color:#8a6a65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;max-width:110px}
+.conv-meta{flex:1;min-width:0}
+.conv-time{font-size:11px;color:#8a6a65;white-space:nowrap}
+.ch-badge{font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;color:#fff;flex-shrink:0;white-space:nowrap}
+.msg-thread-area{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;background:#FFF8F0}
+.thread-slide{position:absolute;inset:0;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.25,.46,.45,.94)}
+.thread-slide.open{transform:translateX(0)}
+.chat-hdr{background:#fff;padding:14px 20px;border-bottom:.5px solid #f0e8e4;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.ch-hdr-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.ch-name{font-size:15px;font-weight:700;color:#532822}
+.ch-sub{font-size:12px;color:#8a6a65;margin-top:1px}
+.messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;background:#FFF8F0}
+.msg-row{display:flex;flex-direction:column;gap:2px}
+.msg-row.mine{align-items:flex-end}
+.bwrap{max-width:65%;width:fit-content}
+.bubble{padding:11px 15px;border-radius:14px;font-size:14px;line-height:1.5;word-break:normal;overflow-wrap:break-word}
+.bubble.them{background:#E9E9EB;color:#1a1a1a;border-bottom-left-radius:3px}
+.bubble.mine{background:#0084C5;color:#fff;border-bottom-right-radius:3px}
+.nb{opacity:0;transform:translateY(10px);transition:opacity .32s,transform .32s}
+.nb.v{opacity:1;transform:translateY(0)}
+.composer{background:#fff;padding:12px 20px;border-top:.5px solid #f0e8e4;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.ch-sel{display:flex;gap:6px;margin-bottom:2px}
+.ch-btn{display:flex;align-items:center;gap:4px;padding:5px 14px;border-radius:50px;border:1.5px solid #e0d4cf;background:#fff;font-size:13px;font-family:inherit;font-weight:600;color:#532822;cursor:pointer}
+.ch-btn.active{background:#0084C5;color:#fff;border-color:#0084C5}
+.cmp-wrap{background:#fff;border:.5px solid #e0d4cf;border-radius:50px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:10px;transition:border-color .2s}
+.cmp-wrap.focused{border-color:#532822}
+.reply-inp{flex:1;font-size:14px;color:#532822;font-family:inherit;min-height:20px;line-height:1.4}
+.send-btn{background:#0084C5;color:#fff;border:none;border-radius:50px;padding:9px 22px;font-size:14px;font-family:inherit;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
 
-/* ══════════════════════════════
-   SCENE 4: PROJECTS
-══════════════════════════════ */
+/* ══ SCENE 4: PROJECTS ══ */
 #s4{background:#532822}
-.pmc{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;background:#FFF2E9}
-.pmch{background:#fff;border-bottom:.5px solid #f0e8e4;padding:14px 20px;flex-shrink:0}
-.pmch h2{font-size:26px;font-weight:700;color:#532822}
-.kbwrap{flex:1;padding:16px;display:flex;flex-direction:column;overflow:hidden}
-.kb{flex:1;display:flex;gap:14px;overflow:hidden}
-.kcol{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
-.kcolh{display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:8px;flex-shrink:0}
-.kcoll{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8a6a65}
-.kcolc{background:#e8e0db;color:#8a6a65;font-size:11px;font-weight:700;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.kcard{background:#fff;border-radius:10px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(83,40,34,.07);transition:box-shadow .25s,transform .25s,opacity .3s}
-.kcard.lift{box-shadow:0 14px 36px rgba(0,0,0,.2);transform:rotate(2deg) scale(1.04)}
-.kcard.hide{opacity:0}
-.kct{font-size:14px;font-weight:600;color:#532822}
-.kcm{font-size:12px;color:#8a6a65;margin-top:4px}
-.kcp{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
-#drag-clone{position:absolute;width:290px;background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 14px 36px rgba(0,0,0,.2);transform:rotate(2deg) scale(1.04);z-index:999;pointer-events:none;display:none;transition:left .75s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1),transform .4s ease}
-#drag-clone.drop{transform:rotate(0) scale(1)}
+.proj-pg{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#FFF2E9}
+.proj-hdr{background:#fff;border-bottom:.5px solid #f0e8e4;flex-shrink:0}
+.proj-hdr-top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px}
+.proj-hdr-top h2{font-size:32px;font-weight:700;color:#532822}
+.btn-new{display:flex;align-items:center;gap:6px;padding:8px 20px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:12px;font-family:inherit;font-weight:600;cursor:pointer}
+.proj-tabs{display:flex;padding:0 20px}
+.proj-tab{padding:10px 16px;font-size:14px;font-weight:600;color:#8a6a65;cursor:pointer;border-bottom:2px solid transparent}
+.proj-tab.active{color:#532822;font-weight:700;border-bottom-color:#532822}
+.proj-body{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.task-group{border:1px solid #e8e0db;border-radius:10px;overflow:hidden}
+.grp-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;cursor:pointer}
+.grp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.grp-title{font-size:12px;font-weight:600;color:#532822}
+.grp-ct{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;background:#f0f0f0;color:#6b6b6b}
+.grp-chev{margin-left:auto;font-size:11px;color:#8a6a65}
+.task-tbl{width:100%;border-collapse:collapse;table-layout:fixed}
+.task-tbl th{font-size:10px;font-weight:600;color:#6b6b6b;text-transform:uppercase;letter-spacing:.6px;padding:8px 14px;text-align:left;border-bottom:1px solid #e8e0db;background:#fff}
+.task-tbl td{padding:10px 14px;font-size:13px;border-bottom:1px solid #f0f0f0;vertical-align:middle;background:#fff;transition:background .15s}
+.task-tbl tr:last-child td{border-bottom:none}
+.task-tbl tr.row-hi td{background:#FFF8F4}
+.t-name{font-weight:600;color:#1a1a1a}
+.t-sub{font-size:11px;color:#6b6b6b;margin-top:2px}
+.appr-badge{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;display:inline-block}
+.status-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;display:inline-block}
+/* Task detail panel */
+.td-overlay{position:absolute;inset:0;background:rgba(0,0,0,.28);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s}
+.td-overlay.open{opacity:1;pointer-events:auto}
+.td-panel{position:absolute;top:0;right:0;width:63%;height:100%;background:#fff;z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.1)}
+.td-panel.open{transform:translateX(0)}
+.td-phdr{background:#D6EAFF;padding:16px 20px 14px;display:flex;align-items:flex-start;gap:10px;flex-shrink:0;border-bottom:1px solid #e8e0db}
+.td-title{font-size:15px;font-weight:700;color:#532822;line-height:1.35}
+.td-meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.td-meta-item{font-size:11px;color:#8a6a65}
+.td-close{width:28px;height:28px;border-radius:6px;background:rgba(83,40,34,.08);border:none;cursor:pointer;color:#532822;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;line-height:1;font-family:inherit}
+.td-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+.td-field-lbl{font-size:11px;font-weight:700;color:#8a6a65;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.td-field-val{font-size:14px;color:#1a1a1a;line-height:1.55}
+.td-footer{padding:14px 20px;border-top:1px solid #e8e0db;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.td-save{background:#532822;color:#FFF2E9;border:none;border-radius:50px;padding:9px 24px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer}
+.td-delete{background:none;border:none;cursor:pointer;color:#b94040;font-size:13px;font-weight:600;font-family:inherit}
 
-/* ══════════════════════════════
-   SCENE 5: KIKI AI
-══════════════════════════════ */
+/* ══ SCENE 5: KIKI AI ══ */
 #s5{background:#532822}
-.aisb{width:260px;min-width:260px;background:#fff;border-right:.5px solid #f0e8e4;display:flex;flex-direction:column;flex-shrink:0}
-.aisbtp{padding:14px 12px 12px;border-bottom:.5px solid #f0e8e4}
-.ncbtn{width:100%;padding:9px 14px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.aichat{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#FFF2E9}
-.aihdr{background:#fff;border-bottom:.5px solid #f0e8e4;height:60px;padding:0 20px;display:flex;align-items:center;flex-shrink:0}
-.aihdr h2{font-size:32px;font-weight:700;color:#532822}
-.aimsgs{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.aiinner{max-width:720px;width:100%;margin:0 auto;padding:28px 24px 0;display:flex;flex-direction:column;gap:14px}
-.mu{align-self:flex-end;background:#532822;color:#FFF2E9;padding:11px 15px;border-radius:14px;border-bottom-right-radius:4px;font-size:14px;line-height:1.55;max-width:72%;white-space:pre-wrap;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
-.mu.v{opacity:1;transform:translateY(0)}
-.mb{align-self:flex-start;background:#fff;color:#1a1a1a;border:1px solid #e8e0db;padding:11px 15px;border-radius:14px;border-bottom-left-radius:4px;font-size:14px;line-height:1.55;max-width:72%;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
-.mb.v{opacity:1;transform:translateY(0)}
-.calcrd{align-self:flex-start;background:#fff;border:1px solid #e8e0db;border-radius:14px;overflow:hidden;max-width:280px;opacity:0;transform:translateY(12px) scale(.97);transition:opacity .4s,transform .4s}
-.calcrd.v{opacity:1;transform:translateY(0) scale(1)}
-.calcrdhdr{background:#44A574;color:#fff;padding:8px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
-.calcrdbdy{padding:12px 14px}
-.calcrdtl{font-size:14px;font-weight:700;color:#532822}
-.calcrdtm{font-size:12px;color:#8a6a65;margin-top:3px}
-.aicompose{background:#FFF2E9;padding:10px 24px 18px;flex-shrink:0}
-.aicinn{max-width:720px;margin:0 auto;background:#fff;border:1px solid #e8e0db;border-radius:14px;padding:12px 14px;display:flex;align-items:flex-end;gap:10px;transition:border-color .15s,box-shadow .15s}
-.aicinn.focused{border-color:#532822;box-shadow:0 0 0 3px rgba(83,40,34,.07)}
-.aiinput{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:#1a1a1a;background:transparent;min-height:44px;line-height:1.55;display:flex;align-items:center}
-.aiinput::after{content:'|';opacity:0;animation:blink 1s step-end infinite}
-.aiinput.typing::after{opacity:1}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.aisend{padding:8px 20px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.ai-sb{width:260px;min-width:260px;background:#fff;border-right:.5px solid #f0e8e4;display:flex;flex-direction:column;flex-shrink:0}
+.ai-sb-top{padding:12px 12px 10px;border-bottom:.5px solid #f0e8e4;display:flex;align-items:center;gap:8px}
+#new-chat-btn{flex:1;padding:9px 14px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.sess-list{flex:1;overflow-y:auto;padding:6px}
+.sess-grp-lbl{font-size:11px;font-weight:700;color:#9b9b9b;text-transform:uppercase;letter-spacing:.6px;padding:10px 8px 4px;display:flex;align-items:center;justify-content:space-between;border-radius:6px}
+.sess-item{padding:8px 12px;border-radius:8px;margin-bottom:1px;cursor:pointer}
+.sess-item:hover,.sess-item.active{background:#FFF2E9}
+.sess-title{font-size:14px;font-weight:500;color:#1a1a1a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sess-time{font-size:11px;color:#9b9b9b;margin-top:2px}
+.ai-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:#FFF2E9}
+.ai-hdr{background:#fff;border-bottom:.5px solid #f0e8e4;height:60px;padding:0 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+#ai-sb-toggle{width:32px;height:32px;border-radius:8px;border:1px solid #e8e0db;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#8a6a65;font-size:14px;flex-shrink:0}
+#ai-page-title{font-size:32px;font-weight:700;color:#532822}
+#ai-main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+#ai-inner{max-width:720px;width:100%;margin:0 auto;padding:28px 24px 0;display:flex;flex-direction:column;gap:14px}
+.ai-greeting{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 24px 24px;text-align:center}
+#ai-g-name{font-size:28px;font-weight:700;color:#532822;letter-spacing:-.5px}
+#ai-g-sub{font-size:14px;color:#8a6a65;margin-top:8px}
+.suggestion-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px}
+.pill{background:#fff;border:1.5px solid #e0d4cf;border-radius:50px;padding:8px 18px;font-size:13px;font-weight:600;color:#532822;cursor:pointer;font-family:inherit}
+.msg-u{align-self:flex-end;max-width:80%;background:#532822;color:#FFF2E9;padding:11px 15px;border-radius:14px;border-bottom-right-radius:4px;font-size:14px;line-height:1.55;opacity:0;transform:translateY(8px);transition:opacity .26s,transform .26s}
+.msg-u.v{opacity:1;transform:translateY(0)}
+.msg-a{align-self:flex-start;max-width:80%;background:#fff;color:#1a1a1a;padding:11px 15px;border-radius:14px;border-bottom-left-radius:4px;border:1px solid #e8e0db;font-size:14px;line-height:1.55;opacity:0;transform:translateY(8px);transition:opacity .26s,transform .26s}
+.msg-a.v{opacity:1;transform:translateY(0)}
+.cal-card-ai{align-self:flex-start;background:#fff;border:1px solid #e8e0db;border-radius:14px;overflow:hidden;max-width:280px;opacity:0;transform:translateY(12px) scale(.97);transition:opacity .35s,transform .35s}
+.cal-card-ai.v{opacity:1;transform:translateY(0) scale(1)}
+.cal-card-ai-hdr{background:#44A574;color:#fff;padding:8px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.cal-card-ai-body{padding:12px 14px}
+.cal-card-ai-title{font-size:14px;font-weight:700;color:#532822}
+.cal-card-ai-time{font-size:12px;color:#8a6a65;margin-top:3px}
+#ai-compose-wrap{background:#FFF2E9;padding:8px 24px 16px;flex-shrink:0}
+#ai-compose-inner{max-width:720px;margin:0 auto}
+#ai-composer{background:#fff;border:1px solid #e8e0db;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s,box-shadow .15s}
+#ai-composer.focused{border-color:#532822;box-shadow:0 0 0 3px rgba(83,40,34,.07)}
+#ai-ta{width:100%;min-height:52px;border:none;outline:none;font-family:inherit;font-size:14px;color:#1a1a1a;resize:none;background:transparent;line-height:1.55}
+#ai-ta::placeholder{color:#b8b8b8}
+#ai-row{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.ai-send{padding:8px 22px;background:#532822;color:#FFF2E9;border:none;border-radius:50px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer}
 
-/* ══════════════════════════════
-   SCENE 6: END
-══════════════════════════════ */
+/* ══ SCENE 6: END ══ */
 #s6{background:#1a0e0b;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#s6t{font-size:44px;font-weight:700;color:#FFF2E9;text-align:center;line-height:1.25;opacity:0;transform:translateY(14px);transition:opacity .8s,transform .8s}
+#s6t{font-size:44px;font-weight:700;color:#FFF2E9;text-align:center;line-height:1.25;opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s}
 #s6t.v{opacity:1;transform:translateY(0)}
-#s6s{font-size:16px;color:#8a6a65;margin-top:16px;opacity:0;transition:opacity .8s .4s}
+#s6s{font-size:16px;color:#8a6a65;margin-top:16px;opacity:0;transition:opacity .7s .4s}
 #s6s.v{opacity:1}
 </style>
 </head>
 <body>
 
-<!-- ══ CURSOR ══ -->
+<!-- ═══════ CURSOR ═══════ -->
 <div id="cur"><div class="c-dot"></div><div class="c-tail"></div></div>
 
-<!-- ══════════════════════════════════════════════════
-     SCENE 1: BRIEFING
-══════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     SCENE 1 — BRIEFING
+════════════════════════════════════ -->
 <div class="scene" id="s1">
-  <div class="s1in">
-    <div class="s1greet">
-      <h1>Good morning, Sarah.</h1>
-      <p>Friday 13 June 2026</p>
+  <div class="brief-inner">
+    <div>
+      <div class="brief-eyebrow">Friday 15 June 2026</div>
+      <div class="brief-title">Good morning, Sarah.</div>
     </div>
-    <div class="s1cards">
+    <div class="brief-cards">
       <div class="bc" id="bc0" style="background:#E05228;color:#FFF2E9">
-        <div class="bc-sh" style="background:#FFF2E9"></div>
-        <div class="bc-t" style="color:#FFF2E9">Open Tasks</div>
-        <div class="bc-n">4</div>
-        <div class="bc-s">2 due today · 1 overdue</div>
+        <div class="bc-bg"></div>
+        <div class="bc-lbl">Tasks Due Today</div>
+        <div class="bc-num">4</div>
+        <div class="bc-row">· Finalise brand guidelines</div>
+        <div class="bc-row">· Invoice approval – Bloom</div>
       </div>
       <div class="bc" id="bc1" style="background:#0084C5;color:#FFF2E9">
-        <div class="bc-sh" style="background:#FFF2E9"></div>
-        <div class="bc-t" style="color:#FFF2E9">Unread Messages</div>
-        <div class="bc-n">6</div>
-        <div class="bc-s">James, Rachel + 4 more</div>
+        <div class="bc-bg"></div>
+        <div class="bc-lbl">Unread Messages</div>
+        <div class="bc-num">6</div>
+        <div class="bc-row">· James Hartley</div>
+        <div class="bc-row">· Rachel Vance + 4 more</div>
       </div>
       <div class="bc" id="bc2" style="background:#44A574;color:#FFF2E9">
-        <div class="bc-sh" style="background:#FFF2E9"></div>
-        <div class="bc-t" style="color:#FFF2E9">Appointments (7d)</div>
-        <div class="bc-n">3</div>
-        <div class="bc-s">Next: Brand strategy call</div>
+        <div class="bc-bg"></div>
+        <div class="bc-lbl">Upcoming Today</div>
+        <div class="bc-num">2</div>
+        <div class="bc-row">· Brand Strategy Call 2pm</div>
+        <div class="bc-row">· Client review 4:30pm</div>
       </div>
       <div class="bc" id="bc3" style="background:#FF9299;color:#FFF2E9">
-        <div class="bc-sh" style="background:#FFF2E9"></div>
-        <div class="bc-t" style="color:#FFF2E9">New Contacts (7d)</div>
-        <div class="bc-n">2</div>
-        <div class="bc-s">This week</div>
+        <div class="bc-bg"></div>
+        <div class="bc-lbl">Needs Attention</div>
+        <div class="bc-num">3</div>
+        <div class="bc-row">· 1 overdue invoice</div>
+        <div class="bc-row">· 2 unanswered threads</div>
       </div>
     </div>
-    <button id="s1btn">Enter Dashboard</button>
+    <button class="brief-go" id="s1btn">Enter dashboard →</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     SCENE 2: DASHBOARD
-══════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     SCENE 2 — HOME / DASHBOARD
+════════════════════════════════════ -->
 <div class="scene" id="s2">
   <div class="aw">
-    <div class="sb" id="sb2"></div>
-    <div class="mc">
-      <div class="mch">
+    <div class="gsb" id="gsb2"></div>
+    <div class="pg-content">
+      <div class="dash-hdr">
         <h2>Good morning, Sarah.</h2>
-        <p>Friday 13 June 2026 · Here's what's happening today.</p>
+        <p>Friday 15 June 2026 · Here's what's on today.</p>
       </div>
-      <div class="mcb">
-        <div class="sgrid">
-          <div class="sc" style="background:#E05228;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">Open Tasks</div><div class="scn">4</div><div class="scs">2 due today · 1 overdue</div></div>
-          <div class="sc" id="sc-msgs" style="background:#0084C5;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">Unread Messages</div><div class="scn">6</div><div class="scs">James, Rachel + 4 more</div></div>
-          <div class="sc" style="background:#44A574;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">Appointments (7d)</div><div class="scn">3</div><div class="scs">Next: Brand strategy call</div></div>
-          <div class="sc" style="background:#FF9299;color:#FFF2E9"><div class="bgs" style="background:#FFF2E9"></div><div class="sct" style="color:#FFF2E9">New Contacts (7d)</div><div class="scn">2</div><div class="scs">This week</div></div>
+      <div class="pg-body">
+        <div class="stat-grid">
+          <div class="stat-card" style="background:#E05228;color:#FFF2E9"><div class="sc-bg" style="background:#FFF2E9"></div><div class="sc-t" style="color:#FFF2E9">Open Tasks</div><div class="sc-n">4</div><div class="sc-s">2 due today · 1 overdue</div></div>
+          <div class="stat-card" id="sc-msgs" style="background:#0084C5;color:#FFF2E9"><div class="sc-bg" style="background:#FFF2E9"></div><div class="sc-t" style="color:#FFF2E9">Unread Messages</div><div class="sc-n">6</div><div class="sc-s">James, Rachel + 4 more</div></div>
+          <div class="stat-card" style="background:#44A574;color:#FFF2E9"><div class="sc-bg" style="background:#FFF2E9"></div><div class="sc-t" style="color:#FFF2E9">Appointments (7d)</div><div class="sc-n">3</div><div class="sc-s">Next: Brand strategy call</div></div>
+          <div class="stat-card" style="background:#FF9299;color:#FFF2E9"><div class="sc-bg" style="background:#FFF2E9"></div><div class="sc-t" style="color:#FFF2E9">New Contacts (7d)</div><div class="sc-n">2</div><div class="sc-s">This week</div></div>
         </div>
-        <div><div class="secc">Quick Actions</div><div class="qar"><button class="qab">＋ New contact</button><button class="qab">＋ New task</button><button class="qab">＋ New conversation</button><button class="qab">＋ New invoice</button></div></div>
-        <div class="bg2">
-          <div class="dcard">
-            <div class="secc">Recent Activity</div>
-            <div class="ar"><div class="av" style="width:30px;height:30px;background:#FFD05D;color:#532822">JH</div><div><div class="an">James Hartley</div><div class="ad">"Hey Sarah, love the brand deck direction…"</div><div class="at">2h ago</div></div></div>
-            <div class="ar"><div class="av" style="width:30px;height:30px;background:#FF9299;color:#7a1a22">RV</div><div><div class="an">Rachel Vance</div><div class="ad">New message received</div><div class="at">4h ago</div></div></div>
-            <div class="ar"><div class="av" style="width:30px;height:30px;background:#44A574;color:#fff">TO</div><div><div class="an">Tom Okello</div><div class="ad">Invoice viewed</div><div class="at">Yesterday</div></div></div>
+        <div>
+          <div class="sec-lbl">Quick Actions</div>
+          <div class="qa-grid">
+            <button class="qa-btn">＋ New contact</button>
+            <button class="qa-btn">＋ New task</button>
+            <button class="qa-btn">＋ New conversation</button>
+            <button class="qa-btn">＋ New invoice</button>
           </div>
-          <div class="dcr">
-            <div class="dcard">
-              <div class="secc">Payments</div>
-              <div class="pr"><span class="ptag" style="color:#8a6a65">Draft</span><div class="pamts"><div class="pamt">$2,400</div><div class="pct">2 invoices</div></div></div>
-              <div class="pr"><span class="ptag" style="color:#E05228">Due</span><div class="pamts"><div class="pamt">$1,800</div><div class="pct">1 invoice</div></div></div>
-              <div class="pr"><span class="ptag" style="color:#44A574">Received</span><div class="pamts"><div class="pamt">$6,500</div><div class="pct">3 invoices</div></div></div>
+        </div>
+        <div class="bottom-grid">
+          <div class="card">
+            <div class="sec-lbl" style="margin-bottom:8px">Recent Activity</div>
+            <div class="act-item"><div class="act-av" style="background:#FFD05D;color:#532822">JH</div><div><div class="act-name">James Hartley</div><div class="act-desc">"Love the brand deck direction…"</div><div class="act-time">2h ago</div></div></div>
+            <div class="act-item"><div class="act-av" style="background:#FF9299;color:#7a1a22">RV</div><div><div class="act-name">Rachel Vance</div><div class="act-desc">New message received</div><div class="act-time">4h ago</div></div></div>
+            <div class="act-item"><div class="act-av" style="background:#44A574;color:#fff">TO</div><div><div class="act-name">Tom Okello</div><div class="act-desc">Invoice viewed</div><div class="act-time">Yesterday</div></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="card">
+              <div class="sec-lbl" style="margin-bottom:8px">Payments</div>
+              <div class="pay-row"><span class="pay-tag" style="color:#8a6a65">Draft</span><div><div class="pay-amt">$2,400</div><div class="pay-ct">2 invoices</div></div></div>
+              <div class="pay-row"><span class="pay-tag" style="color:#E05228">Due</span><div><div class="pay-amt">$1,800</div><div class="pay-ct">1 invoice</div></div></div>
+              <div class="pay-row"><span class="pay-tag" style="color:#44A574">Received</span><div><div class="pay-amt">$6,500</div><div class="pay-ct">3 invoices</div></div></div>
             </div>
-            <div class="dcard">
-              <div class="secc">Recent Contacts</div>
-              <div class="rcr"><div class="av" style="width:28px;height:28px;background:#FFD05D;color:#532822">JH</div><div><div class="rcn">James Hartley</div><div class="rce">james@bloomstudio.com</div></div></div>
-              <div class="rcr"><div class="av" style="width:28px;height:28px;background:#FF9299;color:#7a1a22">RV</div><div><div class="rcn">Rachel Vance</div><div class="rce">rachel@vancedesign.co</div></div></div>
-              <div class="rcr"><div class="av" style="width:28px;height:28px;background:#44A574;color:#fff">TO</div><div><div class="rcn">Tom Okello</div><div class="rce">tom@okellobrands.com</div></div></div>
+            <div class="card">
+              <div class="sec-lbl" style="margin-bottom:8px">Recent Contacts</div>
+              <div class="rc-item"><div class="rc-av" style="background:#FFD05D;color:#532822">JH</div><div><div class="rc-name">James Hartley</div><div class="rc-email">james@bloomstudio.com</div></div></div>
+              <div class="rc-item"><div class="rc-av" style="background:#FF9299;color:#7a1a22">RV</div><div><div class="rc-name">Rachel Vance</div><div class="rc-email">rachel@vancedesign.co</div></div></div>
             </div>
+          </div>
+        </div>
+      </div>
+      <!-- Calendar toggle -->
+      <button id="cal-toggle" title="Calendar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#532822" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </button>
+      <!-- Calendar panel -->
+      <div id="cal-panel">
+        <div class="cal-crd-mini">
+          <div class="cal-hdr">
+            <button class="cal-nav-btn">‹</button>
+            <span class="cal-month-lbl">June 2026</span>
+            <button class="cal-nav-btn">›</button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dl">M</div><div class="cal-dl">T</div><div class="cal-dl">W</div><div class="cal-dl">T</div><div class="cal-dl">F</div><div class="cal-dl">S</div><div class="cal-dl">S</div>
+            <div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div><div class="cal-d">5</div><div class="cal-d">6</div><div class="cal-d">7</div>
+            <div class="cal-d">8</div><div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d">11</div><div class="cal-d">12</div><div class="cal-d">13</div><div class="cal-d">14</div>
+            <div class="cal-d today">15</div><div class="cal-d">16</div><div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d">19</div><div class="cal-d evt">20</div><div class="cal-d">21</div>
+            <div class="cal-d">22</div><div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div><div class="cal-d">26</div><div class="cal-d">27</div><div class="cal-d">28</div>
+            <div class="cal-d">29</div><div class="cal-d">30</div><div class="cal-d other">1</div><div class="cal-d other">2</div><div class="cal-d other">3</div><div class="cal-d other">4</div><div class="cal-d other">5</div>
+          </div>
+        </div>
+        <div class="tl-crd">
+          <div class="tl-hdr-lbl">Today's Timeline</div>
+          <div class="tl-appt" style="background:#FFF0C2">
+            <div class="tl-appt-name" style="color:#532822">Brand Strategy Call</div>
+            <div class="tl-appt-who" style="color:#7a4a10">Bloom Studio</div>
+            <div class="tl-appt-when" style="color:#7a4a10">2:00 pm – 3:00 pm</div>
+          </div>
+          <div class="tl-appt" style="background:#f5f5f5">
+            <div class="tl-appt-name" style="color:#1a1a1a">Client Review</div>
+            <div class="tl-appt-who" style="color:#6b6b6b">Rachel Vance</div>
+            <div class="tl-appt-when" style="color:#6b6b6b">4:30 pm – 5:00 pm</div>
           </div>
         </div>
       </div>
@@ -272,541 +378,553 @@ body{width:1400px;height:900px;background:#532822;font-family:'Plus Jakarta Sans
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     SCENE 3: MESSAGES
-══════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     SCENE 3 — MESSAGES
+════════════════════════════════════ -->
 <div class="scene" id="s3">
   <div class="aw">
-    <div class="sb" id="sb3"></div>
-    <div class="msglist">
-      <div class="mlhdr"><h2>Messages</h2></div>
-      <div class="citem on" id="ci-james">
-        <div class="cav" style="width:40px;height:40px;background:#FFD05D;color:#532822">JH</div>
-        <div style="flex:1;min-width:0">
-          <div class="cname">James Hartley</div>
-          <div class="cprev">Hey Sarah, just reviewed…</div>
-        </div>
-        <div class="cbadge" style="background:#7c3aed">Slack</div>
+    <div class="gsb" id="gsb3"></div>
+    <div class="msg-left">
+      <div class="ml-hdr"><h2>Messages</h2></div>
+      <div class="ml-search"><div class="ml-search-ph">Search conversations…</div></div>
+      <div class="ml-filter"><div class="ml-filter-sel">All channels ▾</div></div>
+      <div class="conv-item active" id="ci-james">
+        <div class="conv-av" style="background:#FFD05D;color:#532822">JH</div>
+        <div class="conv-meta"><div class="conv-name">James Hartley</div><div class="conv-prev">Hey Sarah, just reviewed…</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0"><div class="conv-time">2h ago</div><div class="ch-badge" style="background:#7c3aed">Slack</div></div>
       </div>
-      <div class="citem">
-        <div class="cav" style="width:40px;height:40px;background:#FF9299;color:#7a1a22">RV</div>
-        <div style="flex:1;min-width:0">
-          <div class="cname">Rachel Vance</div>
-          <div class="cprev">When are you free to chat?</div>
-        </div>
-        <div class="cbadge" style="background:#25D366">WhatsApp</div>
+      <div class="conv-item">
+        <div class="conv-av" style="background:#FF9299;color:#7a1a22">RV</div>
+        <div class="conv-meta"><div class="conv-name">Rachel Vance</div><div class="conv-prev">When are you free to chat?</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0"><div class="conv-time">4h ago</div><div class="ch-badge" style="background:#25D366">WA</div></div>
       </div>
-      <div class="citem">
-        <div class="cav" style="width:40px;height:40px;background:#44A574;color:#fff">TO</div>
-        <div style="flex:1;min-width:0">
-          <div class="cname">Tom Okello</div>
-          <div class="cprev">Invoice received, thanks!</div>
-        </div>
-        <div class="cbadge" style="background:#0084C5">Email</div>
+      <div class="conv-item">
+        <div class="conv-av" style="background:#44A574;color:#fff">TO</div>
+        <div class="conv-meta"><div class="conv-name">Tom Okello</div><div class="conv-prev">Invoice received, thanks!</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0"><div class="conv-time">Yesterday</div><div class="ch-badge" style="background:#0084C5">Email</div></div>
       </div>
     </div>
-    <div class="thrdarea">
-      <div class="thrd" id="s3-thrd">
-        <div class="thrdhdr">
-          <div class="av" style="width:36px;height:36px;background:#FFD05D;color:#532822;font-size:12px">JH</div>
-          <div><div class="thrdname">James Hartley · Bloom Studio</div><div class="thrdsub">Slack · Active now</div></div>
+    <div class="msg-thread-area">
+      <div class="thread-slide" id="s3-thread">
+        <div class="chat-hdr">
+          <div class="ch-hdr-av" style="background:#FFD05D;color:#532822">JH</div>
+          <div><div class="ch-name">James Hartley · Bloom Studio</div><div class="ch-sub">Slack · Active now</div></div>
         </div>
-        <div class="thrdmsgs">
-          <div class="bt">"Hey Sarah, just reviewed the latest brand deck and love the direction! The colour palette is exactly what we were after."</div>
+        <div class="messages-area" id="s3-msgs">
+          <div class="msg-row">
+            <div class="bwrap"><div class="bubble them">"Hey Sarah, just reviewed the latest brand deck — love the direction! The colour palette is exactly right."</div></div>
+          </div>
         </div>
-        <div class="thrdfooter">
-          <div class="rdiv" id="s3-input"></div>
-          <button class="rsend">Send</button>
+        <div class="composer">
+          <div class="ch-sel">
+            <button class="ch-btn active">Slack</button>
+            <button class="ch-btn">Email</button>
+            <button class="ch-btn">WhatsApp</button>
+          </div>
+          <div class="cmp-wrap" id="s3-wrap">
+            <div class="reply-inp" id="s3-input"></div>
+            <button class="send-btn">Send</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     SCENE 4: PROJECTS
-══════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     SCENE 4 — PROJECTS
+════════════════════════════════════ -->
 <div class="scene" id="s4">
   <div class="aw">
-    <div class="sb" id="sb4"></div>
-    <div class="pmc">
-      <div class="pmch"><h2>Projects</h2></div>
-      <div class="kbwrap">
-        <div class="kb">
-          <div class="kcol" id="kc-ip">
-            <div class="kcolh"><span class="kcoll">In Progress</span><span class="kcolc">2</span></div>
-            <div class="kcard" id="kc-brand">
-              <div class="kct">Finalise brand guidelines</div>
-              <div class="kcm">Bloom Studio</div>
-              <div class="kcp" style="background:#FFF0C2;color:#7a4a10">In Progress</div>
-            </div>
-            <div class="kcard">
-              <div class="kct">Invoice approval – Bloom Studio</div>
-              <div class="kcm">Finance · Due Mon</div>
-              <div class="kcp" style="background:#D6EAFF;color:#0a3a6e">Review</div>
+    <div class="gsb" id="gsb4"></div>
+    <div class="proj-pg">
+      <div class="proj-hdr">
+        <div class="proj-hdr-top">
+          <h2>Projects</h2>
+          <button class="btn-new">＋ New task</button>
+        </div>
+        <div class="proj-tabs">
+          <div class="proj-tab active">Tasks</div>
+          <div class="proj-tab">Clients</div>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="task-group">
+          <div class="grp-hdr">
+            <div class="grp-dot" style="background:#0084C5"></div>
+            <div class="grp-title">In Progress</div>
+            <div class="grp-ct">2</div>
+            <div class="grp-chev">▾</div>
+          </div>
+          <table class="task-tbl">
+            <thead><tr><th style="width:36%">Task</th><th style="width:16%">Status</th><th style="width:16%">Approval</th><th style="width:16%">Budget</th><th style="width:16%">Due</th></tr></thead>
+            <tbody>
+              <tr id="task-row-1">
+                <td><div class="t-name">Finalise brand guidelines</div><div class="t-sub">Bloom Studio</div></td>
+                <td><span class="status-badge" style="background:#D6EAFF;color:#0a3a6e">In Progress</span></td>
+                <td><span class="appr-badge" style="background:#FFF0C2;color:#7a4a10">Pending</span></td>
+                <td>$3,200</td>
+                <td style="color:#FF834C;font-weight:500">Today</td>
+              </tr>
+              <tr>
+                <td><div class="t-name">Invoice approval – Bloom Studio</div><div class="t-sub">Finance</div></td>
+                <td><span class="status-badge" style="background:#D6EAFF;color:#0a3a6e">In Progress</span></td>
+                <td><span class="appr-badge" style="background:#D4FAE4;color:#166534">Ready</span></td>
+                <td>—</td>
+                <td style="color:#FF834C;font-weight:500">Mon 17</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="task-group">
+          <div class="grp-hdr">
+            <div class="grp-dot" style="background:#FFD05D"></div>
+            <div class="grp-title">Upcoming</div>
+            <div class="grp-ct">1</div>
+            <div class="grp-chev">▾</div>
+          </div>
+          <table class="task-tbl">
+            <thead><tr><th style="width:36%">Task</th><th style="width:16%">Status</th><th style="width:16%">Approval</th><th style="width:16%">Budget</th><th style="width:16%">Due</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="t-name">Draft social content</div><div class="t-sub">Rachel Vance</div></td>
+                <td><span class="status-badge" style="background:#FFF0C2;color:#7a4a10">Upcoming</span></td>
+                <td><span class="appr-badge" style="background:#f0f0f0;color:#6b6b6b">Pending</span></td>
+                <td>$800</td>
+                <td>Fri 20</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="task-group" id="completed-group" style="display:none">
+          <div class="grp-hdr">
+            <div class="grp-dot" style="background:#44A574"></div>
+            <div class="grp-title">Completed</div>
+            <div class="grp-ct" id="completed-ct">0</div>
+            <div class="grp-chev">▾</div>
+          </div>
+          <table class="task-tbl">
+            <thead><tr><th style="width:36%">Task</th><th style="width:16%">Status</th><th style="width:16%">Approval</th><th style="width:16%">Budget</th><th style="width:16%">Due</th></tr></thead>
+            <tbody id="completed-rows"></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Task detail panel -->
+      <div class="td-overlay" id="td-ov"></div>
+      <div class="td-panel" id="td-panel">
+        <div class="td-phdr">
+          <div style="flex:1">
+            <div class="td-title">Finalise brand guidelines</div>
+            <div class="td-meta-row">
+              <span class="td-meta-item">📅 Due today</span>
+              <span class="td-meta-item">· Bloom Studio</span>
+              <span class="td-meta-item">· $3,200</span>
             </div>
           </div>
-          <div class="kcol">
-            <div class="kcolh"><span class="kcoll">Upcoming</span><span class="kcolc">1</span></div>
-            <div class="kcard">
-              <div class="kct">Draft social content</div>
-              <div class="kcm">Rachel Vance</div>
-              <div class="kcp" style="background:#F0E8FE;color:#5b21b6">Upcoming</div>
+          <button class="td-close" id="td-close">✕</button>
+        </div>
+        <div class="td-body">
+          <div>
+            <div class="td-field-lbl">Status</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+              <span class="status-badge" style="background:#D6EAFF;color:#0a3a6e;padding:5px 12px;cursor:pointer">In Progress</span>
+              <span class="status-badge" id="td-done-badge" style="background:#f0f0f0;color:#6b6b6b;padding:5px 12px;cursor:pointer;transition:background .2s,color .2s">Completed</span>
             </div>
           </div>
-          <div class="kcol" id="kc-done">
-            <div class="kcolh"><span class="kcoll">Completed</span><span class="kcolc" id="done-count">0</span></div>
-          </div>
+          <div><div class="td-field-lbl">Approval</div><div class="td-field-val"><span class="appr-badge" style="background:#FFF0C2;color:#7a4a10;padding:4px 12px">Pending</span></div></div>
+          <div><div class="td-field-lbl">Description</div><div class="td-field-val" style="color:#6b6b6b;font-size:13px">Finalise brand style guide including colour palette, typography, logo usage, and print/digital specs for Bloom Studio.</div></div>
+          <div><div class="td-field-lbl">Budget</div><div class="td-field-val">$3,200</div></div>
+          <div><div class="td-field-lbl">Contact</div><div class="td-field-val">James Hartley · james@bloomstudio.com</div></div>
+        </div>
+        <div class="td-footer">
+          <button class="td-delete">Delete task</button>
+          <button class="td-save">Save changes</button>
         </div>
       </div>
     </div>
   </div>
-  <div id="drag-clone">
-    <div class="kct">Finalise brand guidelines</div>
-    <div class="kcm">Bloom Studio</div>
-    <div class="kcp" style="background:#FFF0C2;color:#7a4a10">In Progress</div>
-  </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     SCENE 5: KIKI AI
-══════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     SCENE 5 — KIKI AI
+════════════════════════════════════ -->
 <div class="scene" id="s5">
   <div class="aw" style="background:#FFF2E9">
-    <div class="aisb">
-      <div class="aisbtp"><button class="ncbtn">＋ New chat</button></div>
-      <div style="padding:6px">
-        <div style="font-size:11px;font-weight:700;color:#9b9b9b;text-transform:uppercase;letter-spacing:.6px;padding:10px 8px 4px">Today</div>
-        <div style="padding:8px 12px;border-radius:8px;background:#FFF2E9;font-size:14px;font-weight:500;color:#1a1a1a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Brand identity project…</div>
-        <div style="font-size:11px;font-weight:700;color:#9b9b9b;text-transform:uppercase;letter-spacing:.6px;padding:10px 8px 4px">Yesterday</div>
-        <div style="padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:#6b6b6b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Client onboarding flow</div>
-        <div style="padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:#6b6b6b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Q2 invoice summary</div>
+    <div class="gsb" id="gsb5"></div>
+    <div class="ai-sb">
+      <div class="ai-sb-top">
+        <button id="new-chat-btn">＋ New chat</button>
+      </div>
+      <div class="sess-list">
+        <div class="sess-grp-lbl">Today <span>›</span></div>
+        <div class="sess-item active"><div class="sess-title">Brand identity project</div><div class="sess-time">Just now</div></div>
+        <div class="sess-grp-lbl" style="margin-top:4px">Yesterday <span>›</span></div>
+        <div class="sess-item"><div class="sess-title">Client onboarding flow</div><div class="sess-time">Yesterday</div></div>
+        <div class="sess-item"><div class="sess-title">Q2 invoice summary</div><div class="sess-time">Yesterday</div></div>
+        <div class="sess-grp-lbl" style="margin-top:4px">Earlier <span>›</span></div>
+        <div class="sess-item"><div class="sess-title">Social content strategy</div><div class="sess-time">Mon 10 Jun</div></div>
       </div>
     </div>
-    <div class="aichat">
-      <div class="aihdr"><h2>Kiki AI</h2></div>
-      <div class="aimsgs">
-        <div class="aiinner" id="ai-msgs"></div>
+    <div class="ai-wrap">
+      <div class="ai-hdr">
+        <button id="ai-sb-toggle">☰</button>
+        <div id="ai-page-title">Kiki AI</div>
       </div>
-      <div class="aicompose">
-        <div class="aicinn" id="ai-compose">
-          <div class="aiinput" id="ai-input"></div>
-          <button class="aisend">Send</button>
+      <div id="ai-main">
+        <div id="ai-inner">
+          <div class="ai-greeting" id="ai-greeting">
+            <div id="ai-g-name">What can I help with, Sarah?</div>
+            <div id="ai-g-sub">I can send messages, create tasks, book appointments and more.</div>
+            <div class="suggestion-pills">
+              <div class="pill">Send an invoice</div>
+              <div class="pill">Book a meeting</div>
+              <div class="pill">Draft a message</div>
+              <div class="pill">Summarise activity</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="ai-compose-wrap">
+        <div id="ai-compose-inner">
+          <div id="ai-composer">
+            <textarea id="ai-ta" placeholder="Ask Kiki anything…"></textarea>
+            <div id="ai-row"><button class="ai-send">Send</button></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     SCENE 6: END
-══════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════
+     SCENE 6 — END
+════════════════════════════════════ -->
 <div class="scene" id="s6">
   <div id="s6t">Your clients. Your business.<br>One place.</div>
   <div id="s6s">wearekiki.com</div>
 </div>
 
 <script>
-// ── Utilities ──────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const wait = ms => new Promise(r => setTimeout(r, ms));
+// ── Kiki Chocolate logo SVG ────────────────────────────
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 388.55 140.95" height="22" style="display:block;flex-shrink:0"><path d="M57.46,111.2s.05-.02.08-.02c-.03,0-.05.01-.08.02h0Z" fill="#532822"/><path d="M57.46,111.2h0s-.02,0-.02,0c0,0,.01,0,.02,0Z" fill="#532822"/><path d="M60.31,113.43s.01.02.02.04c0-.01,0-.02-.02-.04Z" fill="#532822"/><path d="M60.33,113.49s0,.01,0,.02c0,0,0-.01,0-.02Z" fill="#532822"/><path d="M93.92,140.94c-11.12-.25-21.86-5.58-28.77-14.25-2.98-3.67-4.68-8.54-5.48-13.15-.27-1.56-.82-2.84-2.29-3.59-1.04-.53-2.16-.25-3.13.3-2.11,1.2-3.58,3.34-5.04,5.22-3.42,4.42-6.58,9.16-10.74,12.94-8.42,7.67-16.24,11.59-23.19,11.59-2.06,0-4.07-.35-5.98-1.04-3.89-1.54-6.51-4.03-7.97-7.58-4.51-10.98,3.42-29,8.16-39.77l.83-1.88c2.62-5.56,5.43-11.15,8.14-16.56,3.7-7.38,7.53-15.02,10.98-22.75,1.87-3.6,3.68-7.44,5.43-11.15,5.61-11.88,11.42-24.17,21.07-33.16,4.74-3.97,11.56-6.1,19.67-6.1,2.27,0,4.64.17,7.03.49,4.57.56,7.41,1.88,8.69,4.04,2.21,3.72-.27,9.99-2.67,16.06-.04.08-.25.59-.25.59-.16.39-.31.76-.45,1.14-.28.72-.56,1.45-.84,2.18l-.85,2.3-.55,1.32c-.68,1.62-1.35,3.23-2,4.85-.68,1.66-1.35,3.33-2.02,5-.32.77-.6,1.56-.89,2.36l-.22.65-.07.16c-2.25,5.03-4.64,10.63-5.58,16.13-.08.4-.14.82-.2,1.24-.08.61-.03,1.21.14,1.75.21,1.9,1.35,3.03,3.07,3.03,1.41,0,4.08-.66,10.88-6.39,7.73-7.26,15.7-15.16,24.41-24.18,8.72-9.92,19.05-21.01,31.92-27.67,3.09-1.47,6.06-2.22,8.8-2.22,3.79,0,6.98,1.45,9.23,4.2,3.06,3.75,4.08,9.58,2.78,16.01-1.23,4.8-4.18,9.15-7.03,13.34-.94,1.38-1.87,2.76-2.75,4.15-5.9,8.69-13.91,15.9-21.66,22.88-3.1,2.79-6.31,5.68-9.34,8.64-.76.75-1.53,1.49-2.31,2.23-3.62,3.46-10.97,9.25-10.48,14.84.09,1.09.62,2.2,1.59,2.71.79.42,1.74.38,2.63.31,3.93-.27,7.86-.72,11.75-1.33,3.58-.57,6.92-1.94,10.65-1.37,3.48.53,6.28,3.33,7.11,6.7,1.79,7.25-3.57,17.6-7.95,22.63-9.2,10.91-28.14,22.19-43.91,22.19h-.05c-.09,0-.18,0-.27,0Z" fill="#532822"/><path d="M178.16,48.72c1.56,1.87,3.59,3.28,5.89,4.1,2.28.81,4.74,1.22,7.34,1.22,2.41,0,4.91-.35,7.43-1.05,5.37-1.49,10.19-4.47,13.58-8.39,3.32-3.85,4.73-8.5,3.78-12.44-.7-2.89-2.69-5.47-5.45-7.09-1.45-.85-3.14-1.5-5.03-1.92h-.14s-.24-.09-.24-.09l-.14-.03h-.12s-.67-.12-.82-.14c-.64-.09-1.32-.15-2.07-.19-.42-.02-.84-.03-1.27-.03-1.35,0-2.67.11-3.92.32-5.65.91-10.75,3.26-14.74,6.77-2.14,1.88-7.03,6.96-6.36,13.42.21,2.07,1.02,4.05,2.28,5.55Z" fill="#532822"/><path d="M342.65,48.72c1.56,1.87,3.59,3.28,5.89,4.1,2.27.81,4.74,1.22,7.34,1.22,2.41,0,4.91-.35,7.43-1.05,5.37-1.49,10.19-4.47,13.58-8.39,3.32-3.85,4.74-8.5,3.78-12.44-.7-2.89-2.69-5.47-5.45-7.09-1.45-.85-3.14-1.5-5.03-1.92h-.14s-.24-.09-.24-.09l-.14-.03h-.12s-.68-.12-.82-.14c-.64-.09-1.32-.15-2.07-.19-.42-.02-.84-.03-1.27-.03-1.35,0-2.67.11-3.92.32-5.65.91-10.75,3.26-14.74,6.77-2.14,1.88-7.03,6.96-6.36,13.42.21,2.07,1.02,4.05,2.28,5.55Z" fill="#532822"/><path d="M386.46,88.52c-1.42-1.7-3.82-2.79-6.12-2.79-1.17,0-2.85.28-4.26,1.69-3.04,2.63-5.9,4.34-8.72,5.23-1.01.32-2.23.59-3.28.75-.94.14-2.04-.06-2.56-.86-.4-.6-.37-1.39-.29-2.11.07-.59.15-1.18.26-1.76.77-4.06,2.82-7.72,3.74-11.76.51-2.24.83-4.71-.05-6.91s-2.78-3.67-4.73-4.83c-3.23-1.92-6.82-3.24-10.32-4.56-1.97-.74-3.84-1.11-5.57-1.11-5.29,0-9.7,3.57-13.48,10.93-2.87,5.23-5.22,10.73-7.11,16.39-.5,1.48-.96,2.98-1.4,4.48-.52,1.81-.82,2.9-2.33,4.12-1.28,1.04-2.78,1.77-4.26,2.46-4.54,2.09-11.05,5.84-16.14,3.59-.64-.28-1.22-.8-1.4-1.48-.29-1.06.44-2.14,1.27-2.86,1.22-1.07,2.74-2.01,3.84-3.18,0,0,.16-.17.16-.17.58-.57,1.19-1.12,1.8-1.64.18-.17.37-.32.56-.49l.24-.21.93-.97c2.89-3.01,5.88-6.13,7.64-9.83,2.1-4.57,1.8-9.55-.87-14.03-3.29-5.54-9.59-9.39-16.07-9.82-.43-.04-.85-.05-1.28-.05-4.79,0-9.29,2.17-14.3,4.82-1.15.55-2.3,1.23-3.52,1.94-3.21,1.88-6.53,3.83-10.36,3.83-1.46,0-2.78-.33-3.36-1.8-.45-1.15-.34-2.37-.18-3.55.02-.17.05-.34.06-.5v-.11s.17-.79.17-.79l.05-.2.02-.11.02-.09c.1-.44.25-.89.48-1.46v-.04c.14-.41.3-.82.47-1.22l.18-.45c.18-.37.37-.74.55-1.11l.34-.66.15-.24s.27-.53.32-.63l.11-.26c.23-.57.48-1.15.72-1.61.18-.4.37-.77.54-1.06.13-.28.28-.55.43-.81.06-.15.12-.3.21-.48.18-.43.39-.84.6-1.25l.25-.48c.31-.58.6-1.13.88-1.62l.06-.12c.2-.39.39-.78.58-1.17l.24-.5c.28-.57.59-1.13.89-1.67.18-.33.34-.65.51-.98l.34-.66c.28-.56.59-1.11.88-1.6.26-.48.49-1,.71-1.51l.12-.27c.39-.91.79-1.81,1.2-2.72.4-.9.8-1.8,1.19-2.69.84-1.98,1.77-3.95,2.53-5.96,3.66-9.73-7.93-13.3-15-14.62-1.6-.3-3.15-.45-4.63-.45-12.03,0-18.19,9.59-24.97,22.05-1.34,2.85-2.7,5.7-4.05,8.55-1.92,4.04-3.85,8.08-5.73,12.14-2.93,6.3-5.78,12.63-8.42,19.06-1.32,3.2-2.59,6.42-3.78,9.67-.95,2.57-2.58,4.23-4.77,5.85-1.99,1.47-4.16,2.72-6.52,3.47-1.56.5-3.64,1.13-5.09-.1-.63-.53-.96-1.36-1.05-2.18s.06-1.65.25-2.45c.76-3.21,2.4-6.07,3.3-9.25.55-1.94,1.03-3.97.94-6-.3-7.33-10.04-9.97-15.59-12.06-1.97-.74-3.84-1.11-5.57-1.11-5.29,0-9.7,3.57-13.48,10.93-7.42,13.52-11.88,29.69-13.63,49.46-.51,5.13-.26,12.19,3.84,16.72,2.6,2.88,6.46,4.33,11.46,4.33h.32c12.22-.34,25.53-7.51,36.05-16.57.11,3.78.81,7.38,2.59,10.15,1.91,2.99,4.84,4.8,8.86,5.54.63.08,1.26.11,1.89.11,6.56,0,11.98-4.24,17.23-8.34,2.31-1.81,4.7-3.67,7.13-5.14.2-.13.41-.23.62-.33l.27-.13.16-.03c.86-.17,1.73-.26,2.58-.26.69,0,1.39.06,2.07.17l.11.02.11.04c4.06,1.4,7.55,3.78,10.93,6.08,1.63,1.11,3.31,2.26,4.94,3.22.13.05.26.12.49.27.1.08.22.13.41.23l.62.29c2.86,1.34,5.57,2.61,8.61,3.3h.19l.18.05c.11.03.23.06.35.08l.32.07c.22.06.44.12.66.16,1.11.19,2.2.38,3.34.63l.47.11h.06s.09.03.09.03c.18.02.99.09,1.21.12.06,0,.14,0,.27.01.23.02.43.04.53.05h.12s.33,0,.33,0c.08,0,.16,0,.28.01.23,0,.46,0,.69-.05l.11-.02h.11c9.08-.07,17.96-5.36,25.44-10.53.83-.57,1.66-1.14,2.5-1.71,1.93-1.32,3.89-2.67,5.81-4.06.11,4.22,1.07,8.79,4.02,12.05,2.6,2.88,6.46,4.33,11.46,4.33h.32c18.28-.51,38.98-16.27,49.17-30.83,4.2-6.2,9.21-15.18,4.21-21.6Z" fill="#532822"/></svg>`;
 
-// ── Sidebar HTML ───────────────────────────────────────
-const SB_ICONS = [
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
+// ── Nav items ──────────────────────────────────────────
+const NAV1 = [
+  {l:'Home',         ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'},
+  {l:'Messages',     ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'},
+  {l:'Projects',     ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>'},
+  {l:'Kiki AI',      ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>'},
+  {l:'Payments',     ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>'},
 ];
-const SB_ICONS2 = [
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2"/></svg>',
-  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M20 12h-2M6 12H4M12 4V2M12 22v-2"/></svg>',
+const NAV2 = [
+  {l:'Contacts',     ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>'},
+  {l:'Calendars',    ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'},
+  {l:'Opportunities',ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>'},
+  {l:'Automation',   ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'},
+  {l:'Settings',     ic:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M20 12h-2M6 12H4M12 4V2M12 22v-2"/></svg>'},
 ];
-const LOGO_SVG = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#532822"/><path d="M8 8L8 20M8 14L15 8M8 14L15 20" stroke="#FFD05D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="14" r="2.5" fill="#FFD05D"/></svg>';
-const NAV1 = ['Dashboard','Messages','Projects','Kiki AI','Payments'];
-const NAV2 = ['Contacts','Calendars','Opportunities','Marketing','Automation','Media Storage','Reputation','Set Up','Settings'];
 
-function buildSidebar(el, active) {
-  let h = `<div class="sbl">${LOGO_SVG}<span class="sblt">kiki</span></div>`;
-  h += `<div class="sbloc"><span>Bloom Studio</span><span style="color:#8a6a65;font-size:10px">▾</span></div>`;
-  h += `<div class="sbn">`;
-  NAV1.forEach((n,i) => { h += `<div class="sbi${n===active?' on':''}">${SB_ICONS[i]}<span>${n}</span></div>`; });
-  h += `<div class="sbdiv"></div>`;
-  NAV2.forEach((n,i) => { h += `<div class="sbi">${SB_ICONS2[i]}<span>${n}</span></div>`; });
+function buildSidebar(id, active) {
+  const el = document.getElementById(id);
+  let h = `<div class="gsb-logo">${LOGO_SVG}</div>`;
+  h += `<div class="gsb-loc"><span>Bloom Studio</span><span style="color:#8a6a65;font-size:10px">▾</span></div>`;
+  h += `<div class="gsb-nav">`;
+  NAV1.forEach(n => { h += `<div class="gsb-i${n.l===active?' on':''}">${n.ic}<span>${n.l}</span></div>`; });
+  h += `<div class="gsb-div"></div>`;
+  NAV2.forEach(n => { h += `<div class="gsb-i">${n.ic}<span>${n.l}</span></div>`; });
   h += `</div>`;
   el.innerHTML = h;
 }
+buildSidebar('gsb2','Home');
+buildSidebar('gsb3','Messages');
+buildSidebar('gsb4','Projects');
+buildSidebar('gsb5','Kiki AI');
 
-buildSidebar($('sb2'),'Dashboard');
-buildSidebar($('sb3'),'Messages');
-buildSidebar($('sb4'),'Projects');
+// ── Utilities ─────────────────────────────────────────
+const $  = id => document.getElementById(id);
+const wait = ms => new Promise(r => setTimeout(r, ms));
 
-// ── Cursor ─────────────────────────────────────────────
+// ── Cursor ────────────────────────────────────────────
 const cur = $('cur');
-let curX = 700, curY = 450;
-
-function moveCursor(x, y, dur = 900) {
+function moveCursor(x, y, dur=600) {
   return new Promise(r => {
-    cur.style.transition = `left ${dur}ms cubic-bezier(.4,0,.2,1), top ${dur}ms cubic-bezier(.4,0,.2,1), opacity .3s`;
-    cur.style.left = x + 'px';
-    cur.style.top  = y + 'px';
-    curX = x; curY = y;
+    cur.style.transition = `left ${dur}ms cubic-bezier(.4,0,.2,1),top ${dur}ms cubic-bezier(.4,0,.2,1),opacity .3s`;
+    cur.style.left = x+'px'; cur.style.top = y+'px';
     setTimeout(r, dur);
   });
 }
-
-async function click(x, y) {
-  if (x !== undefined) await moveCursor(x, y, 700);
+async function click(x, y, dur) {
+  if (x !== undefined) await moveCursor(x, y, dur||520);
   cur.classList.add('clicking');
-  await wait(180);
-  cur.classList.remove('clicking');
-  await wait(80);
+  await wait(150); cur.classList.remove('clicking'); await wait(60);
 }
+const cursorHide = () => { cur.style.opacity='0'; };
+const cursorShow = () => { cur.style.opacity='1'; };
 
-function cursorHide() { cur.style.opacity = '0'; }
-function cursorShow() { cur.style.opacity = '1'; }
-
-// ── Scene switching ─────────────────────────────────────
+// ── Scene switch ──────────────────────────────────────
 let activeScene = null;
 async function showScene(id) {
   if (activeScene) activeScene.classList.remove('on');
-  await wait(40);
+  await wait(30);
   activeScene = $(id);
   activeScene.classList.add('on');
-  await wait(400);
-}
-
-// ── Typing ─────────────────────────────────────────────
-async function typeInto(el, text, mpc = 42) {
-  el.classList.add('typing');
-  for (const ch of text) {
-    el.textContent += ch;
-    await wait(mpc + (Math.random() * 20 - 10));
-  }
-  el.classList.remove('typing');
-}
-
-async function typeWords(el, text, mpw = 130) {
-  const words = text.split(' ');
-  el.textContent = '';
-  el.classList.add('v');
-  for (let i = 0; i < words.length; i++) {
-    el.textContent += (i ? ' ' : '') + words[i];
-    await wait(mpw);
-  }
-}
-
-// ── RESET helpers ───────────────────────────────────────
-function resetAll() {
-  // Scene 1
-  ['bc0','bc1','bc2','bc3'].forEach(id => $(id).classList.remove('v'));
-  $('s1btn').classList.remove('v');
-  // Scene 2
-  $('sc-msgs').classList.remove('zoom');
-  // Scene 3
-  $('s3-thrd').classList.remove('open');
-  $('s3-input').textContent = '';
-  $('s3-input').classList.remove('focused');
-  // Scene 4
-  const brand = $('kc-brand');
-  brand.classList.remove('lift','hide');
-  $('kc-ip').querySelector('.kcolh').querySelector('.kcolc').textContent = '2';
-  const done = $('kc-done');
-  const existing = done.querySelectorAll('.kcard');
-  existing.forEach(c => c.remove());
-  $('done-count').textContent = '0';
-  $('drag-clone').style.display = 'none';
-  $('drag-clone').classList.remove('drop');
-  // Scene 5
-  $('ai-msgs').innerHTML = '';
-  $('ai-input').textContent = '';
-  $('ai-input').classList.remove('typing');
-  $('ai-compose').classList.remove('focused');
-  // Scene 6
-  $('s6t').classList.remove('v');
-  $('s6s').classList.remove('v');
-}
-
-// ══════════════════════════════════════════════════════════
-// SCENE 1: BRIEFING
-// ══════════════════════════════════════════════════════════
-async function scene1() {
-  cursorHide();
-  await showScene('s1');
-  await wait(600);
-
-  // Stagger cards
-  for (let i = 0; i < 4; i++) {
-    $('bc'+i).classList.add('v');
-    await wait(160);
-  }
-  await wait(400);
-  $('s1btn').classList.add('v');
-  await wait(700);
-
-  // Cursor appears at centre, moves to button
-  cur.style.transition = 'none';
-  cur.style.left = '700px';
-  cur.style.top  = '370px';
-  cursorShow();
-  await wait(60);
-
-  // Button is centred at ~(700, 660) — estimate based on flex layout
-  await click(700, 660);
   await wait(300);
 }
 
-// ══════════════════════════════════════════════════════════
-// SCENE 2: DASHBOARD
-// ══════════════════════════════════════════════════════════
+// ── Typing ────────────────────────────────────────────
+async function typeInto(el, text, mpc=40) {
+  for (const ch of text) {
+    if (el.tagName === 'TEXTAREA') el.value += ch; else el.textContent += ch;
+    await wait(mpc + Math.random()*16 - 8);
+  }
+}
+async function typeWords(el, text, mpw=105) {
+  const words = text.split(' ');
+  el.textContent = '';
+  el.classList.add('v');
+  for (let i=0; i<words.length; i++) { el.textContent += (i?' ':'')+words[i]; await wait(mpw); }
+}
+
+// ── Reset ─────────────────────────────────────────────
+function resetAll() {
+  ['bc0','bc1','bc2','bc3'].forEach(id => $(id).classList.remove('v'));
+  $('s1btn').classList.remove('v');
+  $('sc-msgs').classList.remove('zoom');
+  $('cal-panel').classList.remove('open');
+  $('cal-toggle').classList.remove('active');
+  $('s3-thread').classList.remove('open');
+  $('s3-input').textContent = '';
+  $('s3-wrap').classList.remove('focused');
+  document.querySelectorAll('.nb').forEach(el => el.remove());
+  $('td-ov').classList.remove('open');
+  $('td-panel').classList.remove('open');
+  const tr1 = $('task-row-1'); if (tr1) tr1.classList.remove('row-hi');
+  $('completed-group').style.display = 'none';
+  $('completed-rows').innerHTML = '';
+  $('completed-ct').textContent = '0';
+  const doneBadge = $('td-done-badge');
+  if (doneBadge) { doneBadge.style.background='#f0f0f0'; doneBadge.style.color='#6b6b6b'; }
+  $('ai-inner').innerHTML = `<div class="ai-greeting" id="ai-greeting">
+    <div id="ai-g-name">What can I help with, Sarah?</div>
+    <div id="ai-g-sub">I can send messages, create tasks, book appointments and more.</div>
+    <div class="suggestion-pills">
+      <div class="pill">Send an invoice</div><div class="pill">Book a meeting</div>
+      <div class="pill">Draft a message</div><div class="pill">Summarise activity</div>
+    </div></div>`;
+  $('ai-ta').value = '';
+  $('ai-composer').classList.remove('focused');
+  $('s6t').classList.remove('v'); $('s6s').classList.remove('v');
+}
+
+// ══════════════════════════════════════
+// SCENE 1 — BRIEFING
+// ══════════════════════════════════════
+async function scene1() {
+  cursorHide();
+  await showScene('s1');
+  await wait(450);
+  for (let i=0;i<4;i++) { $('bc'+i).classList.add('v'); await wait(120); }
+  await wait(320);
+  $('s1btn').classList.add('v');
+  await wait(550);
+  cur.style.transition = 'none';
+  cur.style.left = '700px'; cur.style.top = '340px';
+  cursorShow(); await wait(40);
+  // Button centred at (700, 675) — 2×2 cards ~260px tall, gap 28px → y≈675
+  await click(700, 678);
+  await wait(220);
+}
+
+// ══════════════════════════════════════
+// SCENE 2 — DASHBOARD + CALENDAR
+// ══════════════════════════════════════
 async function scene2() {
   cursorHide();
   await showScene('s2');
   cursorShow();
-
-  // Move cursor across stat cards
-  // App window: left=60, top=56. Sidebar=220. Content starts at x=280
-  // Header ≈60px. Body starts at y=56+60+16=132. Card height ~86px, center y≈175
-  // 4 cards, content width=1240-220-32=988, card+gap ≈ 249
-  // Card centers x: 280+16+~120=416, 665, 914, 1135
-  await moveCursor(416, 190, 1000);
-  await wait(400);
-  await moveCursor(660, 190, 900);
-  await wait(500);
-
-  // Zoom into Unread Messages
+  // App window: left=60, top=56. GHL sidebar=220px. Content x=280..1300.
+  // dash-hdr: 16+32+2+14=~64px. pg-body padding 16. stat-grid gap 10.
+  // stat card h=88. Row 1 center y: 56+64+16+44 = 180
+  // 2 cols: (1020-40-10)/2=485px. Col1 cx: 280+20+242=542. Col2 cx: 280+20+485+10+242=1037
+  await moveCursor(542, 180, 660);
+  await wait(260);
+  await moveCursor(1037, 180, 620);
+  await wait(180);
   $('sc-msgs').classList.add('zoom');
-  await wait(1200);
-  $('sc-msgs').classList.remove('zoom');
-  await wait(400);
-
-  await moveCursor(910, 190, 900);
-  await wait(300);
-  await moveCursor(1136, 190, 900);
   await wait(800);
+  $('sc-msgs').classList.remove('zoom');
+  await wait(180);
+  // Row 2 y: 180+88+10+88/2=312
+  await moveCursor(542, 312, 580);
+  await wait(180);
+  await moveCursor(1037, 312, 580);
+  await wait(260);
+  // Calendar toggle: position:absolute top:14 right:16 in .pg-content
+  // pg-content right edge x=1300. Toggle center: 1300-16-17=1267, y=56+14+17=87
+  await click(1267, 87, 480);
+  $('cal-toggle').classList.add('active');
+  $('cal-panel').classList.add('open');
+  await wait(1100);
 }
 
-// ══════════════════════════════════════════════════════════
-// SCENE 3: MESSAGES
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════
+// SCENE 3 — MESSAGES
+// ══════════════════════════════════════
 async function scene3() {
   cursorHide();
   await showScene('s3');
   cursorShow();
-
-  // Conv list: x=60+220+140=420, James is first item y≈56+60+60+30=206
-  await moveCursor(420, 210, 800);
-  await wait(300);
-  await click(420, 210);
-
-  // Thread slides in
-  $('s3-thrd').classList.add('open');
-  await wait(700);
-
-  // Reply input: thread takes x=60+220+280=560 to x=1300, center x=930
-  // Reply box at bottom: y = 56+790-44 = 802
-  const inputEl = $('s3-input');
-  await moveCursor(820, 800, 900);
-  await wait(200);
-  await click(820, 800);
-  inputEl.classList.add('focused');
-  await wait(300);
-
-  await typeInto(inputEl, 'Thanks James, really glad you like it!', 45);
-  await wait(400);
-
-  // Send button: rightmost at ~x=1190
-  await click(1190, 800);
-  inputEl.classList.remove('focused');
-
-  // New bubble animates in
-  const bm = document.createElement('div');
-  bm.className = 'bm';
-  bm.textContent = 'Thanks James, really glad you like it!';
-  $('s3-thrd').querySelector('.thrdmsgs').appendChild(bm);
-  await wait(80);
-  bm.classList.add('v');
-  inputEl.textContent = '';
-  await wait(1200);
+  // Conv list: x=280..540 (260px). ml-hdr: 16+32+8=56. ml-search: 44. ml-filter: 33.
+  // James row starts at y=56+56+44+33=189, height=~50, center y≈214
+  // Conv item center x: 280+130=410
+  await moveCursor(410, 214, 640);
+  await wait(180);
+  await click(410, 214);
+  $('s3-thread').classList.add('open');
+  await wait(460);
+  // Thread: x=540..1300 (760px). Composer at bottom.
+  // composer: ch-sel(~38)+cmp-wrap(~46)+padding(12+12)=~108px. y center of input:
+  // 846 - 108 + 38 + 23 = 799
+  // Input left edge ~580, send btn right ~1278
+  const inp = $('s3-input');
+  await moveCursor(840, 799, 740);
+  await wait(180);
+  await click(840, 799);
+  $('s3-wrap').classList.add('focused');
+  await wait(220);
+  await typeInto(inp, 'Thanks James, really glad you like it!', 40);
+  await wait(320);
+  await click(1258, 799, 360);
+  $('s3-wrap').classList.remove('focused');
+  const nb = document.createElement('div');
+  nb.className = 'msg-row mine nb';
+  nb.innerHTML = `<div class="bwrap"><div class="bubble mine">Thanks James, really glad you like it!</div></div>`;
+  $('s3-msgs').appendChild(nb);
+  await wait(40); nb.classList.add('v');
+  inp.textContent = '';
+  await wait(850);
 }
 
-// ══════════════════════════════════════════════════════════
-// SCENE 4: PROJECTS
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════
+// SCENE 4 — PROJECTS
+// ══════════════════════════════════════
 async function scene4() {
   cursorHide();
   await showScene('s4');
   cursorShow();
-
-  // Card coords: sidebar=220, padding=16
-  // Content width = 1240-220-32 = 988, 3 cols w/ 2×14px gap = (988-28)/3 = 320px
-  // In Progress col center x = 60+220+16+160 = 456
-  // Card top: header ~60px, body starts y=56+60+16=132, col header=~52px, card at y≈184+30=214
-  const card = $('kc-brand');
-  await moveCursor(456, 230, 900);
-  await wait(400);
-
-  // Lift card
-  card.classList.add('lift');
+  // proj-hdr-top: padding 14+10+10=~56px → h2 center y: 56+14+16=86
+  // proj-tabs: ~46px → y center: 56+56+20=132
+  // proj-body padding 20. First group header: y=56+56+46+20+20=198
+  // table th: ~32px after grp-hdr. First task row center y: 56+56+46+20+10+32+32+20=272
+  // Task name center x: 280+20+36%*1020*0.5 = 280+20+184=484
+  await moveCursor(484, 272, 640);
+  await wait(240);
+  $('task-row-1').classList.add('row-hi');
+  await wait(260);
+  await click(484, 272);
+  // Open detail panel (width=63% of 1020=643px, left edge at 1300-643=657)
+  $('td-ov').classList.add('open');
+  $('td-panel').classList.add('open');
+  await wait(560);
+  // "Completed" status badge inside panel:
+  // td-phdr: 16+15+8+12+14=~65px. td-body padding 20. Status field at y≈56+65+20+30=171
+  // badges row at y≈56+65+20+4+22=167 → center 56+65+20+4+16=161? use 190 to be safe
+  // panel left edge=657. Badges: first at x≈657+20+80=757, second at x≈757+90+8=855
+  await moveCursor(855, 195, 620);
+  await wait(220);
+  await click(855, 195);
+  $('td-done-badge').style.background='#D4FAE4';
+  $('td-done-badge').style.color='#166534';
   await wait(300);
-
-  // Create drag clone at card's position
-  const clone = $('drag-clone');
-  const rect = card.getBoundingClientRect();
-  // rect relative to body (1400×900 canvas)
-  clone.style.left = rect.left + 'px';
-  clone.style.top  = rect.top + 'px';
-  clone.style.display = 'block';
-  card.classList.add('hide');
-
-  await wait(80);
-
-  // Completed col: x = 60+220+16+320+14+320+14+160 = 1124
-  // Animate cursor and clone together
-  const DEST_X = 1100;
-  const DEST_Y = 195;
-  await Promise.all([
-    moveCursor(DEST_X + 145, DEST_Y + 30, 900),
-    new Promise(r => {
-      clone.style.transition = 'left .85s cubic-bezier(.4,0,.2,1), top .5s cubic-bezier(.4,0,.2,1), transform .4s ease';
-      clone.style.left = DEST_X + 'px';
-      clone.style.top  = DEST_Y + 'px';
-      setTimeout(r, 900);
-    })
-  ]);
-
-  // Drop
-  clone.classList.add('drop');
-  await wait(300);
-  clone.style.display = 'none';
-
-  // Add card to Completed column
-  const done = $('kc-done');
-  const newCard = document.createElement('div');
-  newCard.className = 'kcard';
-  newCard.style.opacity = '0';
-  newCard.style.transition = 'opacity .35s ease';
-  newCard.innerHTML = `<div class="kct">Finalise brand guidelines</div><div class="kcm">Bloom Studio</div><div class="kcp" style="background:#D4FAE4;color:#166534">Completed</div>`;
-  done.appendChild(newCard);
-  $('done-count').textContent = '1';
-  await wait(40);
-  newCard.style.opacity = '1';
-  await wait(1200);
+  // Close (✕ btn: top-right of panel header ~x=1275, y=56+32=88)
+  await click(1274, 88, 460);
+  $('td-ov').classList.remove('open');
+  $('td-panel').classList.remove('open');
+  $('task-row-1').classList.remove('row-hi');
+  $('completed-group').style.display = 'block';
+  $('completed-ct').textContent = '1';
+  $('completed-rows').innerHTML = `<tr><td><div class="t-name">Finalise brand guidelines</div><div class="t-sub">Bloom Studio</div></td><td><span class="status-badge" style="background:#D4FAE4;color:#166534">Completed</span></td><td><span class="appr-badge" style="background:#D4FAE4;color:#166534">Approved</span></td><td>$3,200</td><td style="color:#44A574;font-weight:500">Done</td></tr>`;
+  await wait(860);
 }
 
-// ══════════════════════════════════════════════════════════
-// SCENE 5: KIKI AI
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════
+// SCENE 5 — KIKI AI
+// ══════════════════════════════════════
 async function scene5() {
   cursorHide();
   await showScene('s5');
   cursorShow();
-
-  const msgs = $('ai-msgs');
-  const input = $('ai-input');
-  const compose = $('ai-compose');
-
-  // Cursor moves to input box
-  // AI sidebar=260, content x=60+260=320, chat area width=980
-  // Composer max-width=720, centred in 980 → margin=130
-  // Composer left: 60+260+130=450, right: 450+720=1170
-  // Send btn: x~1150, Input centre: x~750
-  // Composer y: 56+790-80=766
-  await moveCursor(750, 770, 900);
+  const inner = $('ai-inner');
+  const ta = $('ai-ta');
+  const composer = $('ai-composer');
+  // ai-sb=260px. ai-wrap x=60+220+260=540..1300 (760px).
+  // ai-hdr=60px. ai-compose-wrap: pad 8+16=24, composer pad 12+52min+8+row(36)+12=120
+  // composer wrap height ≈ 8+120+16=144. Composer top y=846-144=702
+  // textarea center: x=540+(760/2)=920, y=702+8+12+26=748
+  // send btn: x=540+760-24-44=1232, y=702+8+12+52+8+18=800
+  await moveCursor(920, 748, 660);
+  await wait(180);
+  await click(920, 748);
+  composer.classList.add('focused');
+  await wait(220);
+  const P1 = 'Send invoice to James at Bloom Studio — $4,200';
+  await typeInto(ta, P1, 36);
   await wait(300);
-  await click(750, 770);
-  compose.classList.add('focused');
-  await wait(300);
-
-  // Type first prompt
-  const P1 = 'Send invoice to James at Bloom Studio for brand identity project — $4,200';
-  await typeInto(input, P1, 38);
-  await wait(400);
-
-  // Click send
-  await click(1150, 770);
-  compose.classList.remove('focused');
-
-  // User message appears
+  await click(1232, 798, 320);
+  composer.classList.remove('focused');
   const u1 = document.createElement('div');
-  u1.className = 'mu';
-  u1.textContent = P1;
-  msgs.appendChild(u1);
-  await wait(60);
-  u1.classList.add('v');
-  input.textContent = '';
-  await wait(600);
-
-  // AI response word by word
+  u1.className = 'msg-u'; u1.textContent = P1;
+  inner.appendChild(u1);
+  const gr = $('ai-greeting'); if (gr) gr.remove();
+  await wait(40); u1.classList.add('v');
+  ta.value = '';
+  await wait(500);
   const b1 = document.createElement('div');
-  b1.className = 'mb';
-  msgs.appendChild(b1);
+  b1.className = 'msg-a'; inner.appendChild(b1);
   await wait(40);
-  b1.classList.add('v');
-  await typeWords(b1, 'Done! Invoice for $4,200 sent to James Hartley at Bloom Studio. 📄', 120);
-  await wait(900);
-
+  await typeWords(b1, 'Done! Invoice for $4,200 sent to James Hartley at Bloom Studio. 📄', 95);
+  await wait(640);
   // Second prompt
-  await click(750, 770);
-  compose.classList.add('focused');
-  await wait(300);
-
+  await click(920, 748);
+  composer.classList.add('focused'); await wait(180);
   const P2 = 'Book a strategy call with Rachel on Friday at 2pm';
-  await typeInto(input, P2, 40);
-  await wait(400);
-  await click(1150, 770);
-  compose.classList.remove('focused');
-
-  const u2 = document.createElement('div');
-  u2.className = 'mu';
-  u2.textContent = P2;
-  msgs.appendChild(u2);
-  await wait(60);
-  u2.classList.add('v');
-  input.textContent = '';
-  await wait(700);
-
-  // AI response + calendar card
-  const b2 = document.createElement('div');
-  b2.className = 'mb';
-  msgs.appendChild(b2);
-  await wait(40);
-  b2.classList.add('v');
-  await typeWords(b2, 'Done! Strategy call with Rachel Vance booked for Friday 20 June at 2:00 pm. 📅', 110);
+  await typeInto(ta, P2, 36);
   await wait(300);
-
-  const calCard = document.createElement('div');
-  calCard.className = 'calcrd';
-  calCard.innerHTML = `<div class="calcrdhdr">📅 Calendar · Booked</div><div class="calcrdbdy"><div class="calcrdtl">Strategy Call — Rachel Vance</div><div class="calcrdtm">Friday 20 June · 2:00 pm</div></div>`;
-  msgs.appendChild(calCard);
-  await wait(60);
-  calCard.classList.add('v');
-  await wait(1800);
+  await click(1232, 798, 320);
+  composer.classList.remove('focused');
+  const u2 = document.createElement('div');
+  u2.className = 'msg-u'; u2.textContent = P2;
+  inner.appendChild(u2);
+  await wait(40); u2.classList.add('v');
+  ta.value = '';
+  await wait(500);
+  const b2 = document.createElement('div');
+  b2.className = 'msg-a'; inner.appendChild(b2);
+  await wait(40);
+  await typeWords(b2, 'Booked! Strategy call with Rachel Vance — Friday 20 June at 2:00 pm. 📅', 95);
+  await wait(260);
+  const cc = document.createElement('div');
+  cc.className = 'cal-card-ai';
+  cc.innerHTML = `<div class="cal-card-ai-hdr">📅 Calendar · Booked</div><div class="cal-card-ai-body"><div class="cal-card-ai-title">Strategy Call — Rachel Vance</div><div class="cal-card-ai-time">Friday 20 June · 2:00 pm</div></div>`;
+  inner.appendChild(cc);
+  await wait(40); cc.classList.add('v');
+  await wait(1300);
 }
 
-// ══════════════════════════════════════════════════════════
-// SCENE 6: END
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════
+// SCENE 6 — END
+// ══════════════════════════════════════
 async function scene6() {
   cursorHide();
   await showScene('s6');
-  await wait(300);
-  $('s6t').classList.add('v');
-  $('s6s').classList.add('v');
-  await wait(2800);
+  await wait(220);
+  $('s6t').classList.add('v'); $('s6s').classList.add('v');
+  await wait(2100);
 }
 
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════
 // MAIN LOOP
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════
 async function run() {
   resetAll();
   await scene1();
@@ -815,16 +933,12 @@ async function run() {
   await scene4();
   await scene5();
   await scene6();
-  // Fade out
   if (activeScene) activeScene.classList.remove('on');
-  await wait(500);
+  await wait(380);
   run();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  cursorHide();
-  run();
-});
+document.addEventListener('DOMContentLoaded', () => { cursorHide(); run(); });
 </script>
 </body>
 </html>
